@@ -35,58 +35,58 @@ class ChecklistController extends AbstractController
             'category_id' => 1
         ],
      2 => [
-         'id' => 2,
+            'id' => 2,
             'title' => 'Some note 2',
             'text' => 'Loren ipsun 2',
-         'category_id' => 1
+            'category_id' => 1
      ],
      3 => [
-         'id' => 3,
+            'id' => 3,
             'title' => 'Some note 3',
             'text' => 'Loren ipsun 3',
-         'category_id' => 1
+            'category_id' => 1
 
         ],
      4 => [
-         'id' => 4,
+            'id' => 4,
             'title' => 'Some note 4',
             'text' => 'Loren ipsun 4',
-         'category_id' => 2
+            'category_id' => 2
 
         ],
      5 => [
-         'id' => 5,
+            'id' => 5,
             'title' => 'Some note 5',
             'text' => 'Loren ipsun 5',
-         'category_id' => 2
+            'category_id' => 2
 
         ],
      6 => [
-         'id' => 6,
+            'id' => 6,
             'title' => 'Some note 6',
             'text' => 'Loren ipsun 6',
-         'category_id' => 2
+            'category_id' => 2
 
         ],
      7 => [
-         'id' => 7,
+            'id' => 7,
             'title' => 'Some note 7',
             'text' => 'Loren ipsun 7',
-         'category_id' => 3
+            'category_id' => 3
 
         ],
      8 => [
-         'id' => 8,
+            'id' => 8,
             'title' => 'Some note 8',
             'text' => 'Loren ipsun 8',
-         'category_id' => 3
+            'category_id' => 3
 
         ],
      9 => [
-         'id' => 9,
+            'id' => 9,
             'title' => 'Some note 9',
             'text' => 'Loren ipsun 9',
-         'category_id' => 3
+            'category_id' => 3
 
         ]
 
@@ -149,7 +149,7 @@ class ChecklistController extends AbstractController
         $note = $notes[(int) $noteId];
 
         return $this->render('checklist/get.html.twig', [
-            'notes' => $note
+            'note' => $note
         ]);
     }
 }
