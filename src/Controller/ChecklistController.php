@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 namespace App\Controller;
+use App\Entity\Category;
+use App\Entity\Note;
+use App\Repository\NoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,6 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ChecklistController extends AbstractController
 {
+
+
+    private NoteRepository $noteRepository;
+
+    public function __construct(NoteRepository $noteRepository)
+    {
+         $this->noteRepository = $noteRepository;
+    }
+
     private array $categories = [
        1 => [
           'title' => 'My summer weekends',
@@ -152,5 +164,69 @@ class ChecklistController extends AbstractController
             'note' => $note
         ]);
     }
+    /**
+     * @Route("/create", name="create")
+     */
+    public function createAction(): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $newNote = new Note();
+        $newNote
+            ->setTitle('New note title')
+            ->setText('New note text');
+
+        $entityManager->persist($newNote);
+        $entityManager->flush();
+
+
+        $notes = $this->noteRepository->findAll();
+
+
+
+        return $this->render('checklist/list.html.twig', [
+            'notes' => $notes,
+        ]);
+    }
+
+    /**
+     * @Route("/delete_note/{id}", name="create")
+     */
+
+    public function deleteAction(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $noteToDelete = $this->noteRepository->find($id);
+        $entityManager->remove($noteToDelete);
+        $entityManager->flush();
+
+        return $this->render('checklist/delete_note.html.twig', [
+            'id' => $id,
+        ]);
+    }
+
+
+//  /**
+    //  * @Route("/create_category", name="create_category")
+    //  */
+
+    // public function createCategoryAction(): Response
+    // {
+    //    $entityManager = $this->getDoctrine()->getManager();
+    //   $newCategory = new Category();
+    //    $newCategory
+    //       ->setTitle('New Category title')
+    //       ->setNotes('New Category note');
+
+    //   $entityManager->persist($newCategory);
+    //   $entityManager->flush();
+
+    //  $categories = $this->categoryRepository->findAll();
+
+
+    //   return $this->render('checklist/list.html.twig', [
+    //      'categories' => $categories,
+    //  ]);
+    // }
+
 }
 
