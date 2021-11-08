@@ -212,7 +212,7 @@ class ChecklistController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $noteToCreate = $this->noteRepository->find($id);
-        $entityManager->remove($noteToCreate);
+        $entityManager->persist($noteToCreate);
         $entityManager->flush();
 
         return $this->render('checklist/create_note.html.twig', [
@@ -229,7 +229,7 @@ class ChecklistController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $categoryToCreate = $this->categoryRepository->find($id);
-        $entityManager->remove($categoryToCreate);
+        $entityManager->persist($categoryToCreate);
         $entityManager->flush();
 
         return $this->render('checklist/create_category.html.twig', [
