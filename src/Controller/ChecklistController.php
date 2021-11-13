@@ -15,13 +15,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChecklistController extends AbstractController
 {
 
-
     private NoteRepository $noteRepository;
 
     public function __construct(NoteRepository $noteRepository)
     {
         $this->noteRepository = $noteRepository;
     }
+
+ //   private CategoryRepository $categoryRepository;
+
+ //   public function CategoryRepository(CategoryRepository $categoryRepository)
+ //   {
+  //      $this->categoryRepository = $categoryRepository;
+ //   }
+
+
+
 
     private array $categories = [
         1 => [
@@ -211,12 +220,20 @@ class ChecklistController extends AbstractController
     public function createNoteAction(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $noteToCreate = $this->noteRepository->find($id);
-        $entityManager->persist($noteToCreate);
+        $newNote = new Note();
+        $newNote
+            ->setTitle('New note title')
+            ->setText('New note text');
+
+        $entityManager->persist($newNote);
         $entityManager->flush();
 
-        return $this->render('checklist/create_note.html.twig', [
-            'id' => $id,
+
+        $notes = $this->noteRepository->findAll();
+
+
+        return $this->render('checklist/create_note/list.html.twig', [
+            'notes' => $newNote,
         ]);
     }
 
@@ -228,12 +245,20 @@ class ChecklistController extends AbstractController
     public function createCategoryAction(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $categoryToCreate = $this->categoryRepository->find($id);
-        $entityManager->persist($categoryToCreate);
+        $newCategory = new Category();
+        $newCategory
+            ->setTitle('New category title')
+            ->setNotes('New category note');
+
+        $entityManager->persist($newCategory);
         $entityManager->flush();
 
-        return $this->render('checklist/create_category.html.twig', [
-            'id' => $id,
+
+        $categories = $this->categoryRepository->findAll();
+
+
+        return $this->render('checklist/create_category/list.html.twig', [
+            'categories' => $newCategory,
         ]);
     }
 }

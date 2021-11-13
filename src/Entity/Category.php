@@ -18,15 +18,19 @@ class Category
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $notes;
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public function getTitle(): string
     {
