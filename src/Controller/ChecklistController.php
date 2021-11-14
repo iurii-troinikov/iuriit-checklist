@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
@@ -117,7 +118,7 @@ class ChecklistController extends AbstractController
     }
 
     /**
-     * @Route("/{checklist{Id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
+     * @Route("/{checklistId}", name="list_by_checklist", requirements={"checklistId"="\d+"})
      */
     public function listByChecklist(string $checklistId): Response
     {
