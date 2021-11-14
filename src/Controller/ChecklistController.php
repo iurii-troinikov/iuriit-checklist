@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Repository\ToDoRepository;
+use App\Repository\ChecklistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,76 +27,76 @@ class ChecklistController extends AbstractController
     private array $checklists = [
         1 => [
             'title' => 'My summer weekends',
-            'todoes' => [1, 2, 3]
+            'todos' => [1, 2, 3]
         ],
         2 => [
             'title' => 'My favorite books review',
-            'todoes' => [4, 5, 6]
+            'todos' => [4, 5, 6]
         ],
         3 => [
             'title' => 'My friends hobbies',
-            'todoes' => [7, 8, 9]
+            'todos' => [7, 8, 9]
         ]
 
     ];
 
-    private array $todoes = [
+    private array $todos = [
         1 => [
             'id' => 1,
-            'text' => 'Loren ipsun 1',
+            'text' => 'Loren ipsum 1',
             'checklist_id' => 1,
             'done' => true
         ],
         2 => [
             'id' => 2,
-            'text' => 'Loren ipsun 2',
+            'text' => 'Loren ipsum 2',
             'checklist_id' => 1,
             'done' => true
         ],
         3 => [
             'id' => 3,
-            'text' => 'Loren ipsun 3',
+            'text' => 'Loren ipsum3',
             'checklist_id' => 1,
             'done' => true
 
         ],
         4 => [
             'id' => 4,
-            'text' => 'Loren ipsun 4',
+            'text' => 'Loren ipsum 4',
             'checklist_id' => 2,
             'done' => true
 
         ],
         5 => [
             'id' => 5,
-            'text' => 'Loren ipsun 5',
+            'text' => 'Loren ipsum 5',
             'checklist_id' => 2,
             'done' => false
 
         ],
         6 => [
             'id' => 6,
-            'text' => 'Loren ipsun 6',
+            'text' => 'Loren ipsum 6',
             'checklist_id' => 2,
             'done' => false
         ],
         7 => [
             'id' => 7,
-            'text' => 'Loren ipsun 7',
+            'text' => 'Loren ipsum 7',
             'checklist_id' => 3,
             'done' => false
 
         ],
         8 => [
             'id' => 8,
-            'text' => 'Loren ipsun 8',
+            'text' => 'Loren ipsum 8',
             'checklist_id' => 3,
             'done' => false
 
         ],
         9 => [
             'id' => 9,
-            'text' => 'Loren ipsun 9',
+            'text' => 'Loren ipsum 9',
             'checklist_id' => 3,
             'done' => true
 
@@ -111,7 +112,7 @@ class ChecklistController extends AbstractController
     {
 
         return $this->render('checklist/list.html.twig', [
-            'todoes' => $this->todoes,
+            'todos' => $this->todos,
         ]);
     }
 
@@ -125,14 +126,14 @@ class ChecklistController extends AbstractController
         }
 
         $checklist = $this->checklists[(int)$checklistId] ?? null;
-        $todoesIds = $checklist['todoes'];
+        $todosIds = $checklist['todos'];
 
-        $todoes = array_filter($this->todoes, function (array $todo) use ($todoesIds) {
-            return in_array($todo['id'], $todoesIds, true);
+        $todos = array_filter($this->todos, function (array $todo) use ($todosIds) {
+            return in_array($todo['id'], $todosIds, true);
         });
 
         return $this->render('checklist/list.html.twig', [
-            'todoes' => $todoes
+            'todos' => $todos
         ]);
     }
 
@@ -147,17 +148,17 @@ class ChecklistController extends AbstractController
         }
 
         $checklist = $this->checklists[(int)$checklistId] ?? null;
-        $todoesIds = $checklist['todoes'];
+        $todosIds = $checklist['todos'];
 
-        $todoes = array_filter($this->todoes, function (array $todo) use ($todoesIds) {
-            return in_array($todo['id'], $todoesIds, true);
+        $todos = array_filter($this->todos, function (array $todo) use ($todosIds) {
+            return in_array($todo['id'], $todosIds, true);
         });
-        if (!isset($todoes[(int)$todoId])) {
+        if (!isset($todos[(int)$todoId])) {
             throw new Exception('There is no todo in selected checklist');
         }
 
 
-        $todo = $todoes[(int)$todoId];
+        $todo = $todos[(int)$todoId];
 
         return $this->render('checklist/get.html.twig', [
             'todo' => $todo
@@ -179,11 +180,11 @@ class ChecklistController extends AbstractController
         $entityManager->flush();
 
 
-        $todoes = $this->todoRepository->findAll();
+        $todos = $this->todoRepository->findAll();
 
 
         return $this->render('checklist/list.html.twig', [
-            'todoes' => $todoes,
+            'todos' => $todos,
         ]);
     }
 
@@ -219,11 +220,11 @@ class ChecklistController extends AbstractController
         $entityManager->flush();
 
 
-        $todoes = $this->todoRepository->findAll();
+        $todos = $this->todoRepository->findAll();
 
 
         return $this->render('checklist/create_todo/list.html.twig', [
-            'todoes' => $newToDo,
+            'todos' => $newToDo,
         ]);
     }
 
@@ -237,14 +238,14 @@ class ChecklistController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $newChecklist = new Checklist();
         $newChecklist
-            ->setTitle('New Checklist title')
-            ->setNotes('New Checklist note');
+            ->setTitle('New Checklist title');
+
 
         $entityManager->persist($newChecklist);
         $entityManager->flush();
 
 
-        $checklists = $this->checklistRepository->findAll();
+        $checklists = $this->ChecklistRepository->findAll();
 
 
         return $this->render('checklist/create_checklist/list.html.twig', [

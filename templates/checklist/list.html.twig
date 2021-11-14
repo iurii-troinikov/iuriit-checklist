@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}List All Todoes {% endblock %}
+{% block title %}List All Todos {% endblock %}
 
 {% block body %}
     <ul>
-    {% for todo in todoes %}
+    {% for todo in todos %}
         <li>
             <h4>
                <a href="{{ path('checklist_get', {'checklistId': todo.checklist_id, 'todoId': todo.id}) }}">
