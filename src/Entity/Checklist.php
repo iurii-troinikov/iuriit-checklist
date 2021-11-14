@@ -30,7 +30,7 @@ class Checklist
     /**
      * @ORM\OneToMany(targetEntity=ToDo::class, mappedBy="checklist", orphanRemoval=true)
      */
-    private $toDos;
+    private Collection $toDos;
 
     public function __construct(string $title)
     {
@@ -76,7 +76,7 @@ class Checklist
     public function removeToDo(ToDo $toDo): self
     {
         if ($this->toDos->removeElement($toDo)) {
-            // set the owning side to null (unless already changed)
+
             if ($toDo->getChecklist() === $this) {
                 $toDo->setChecklist(null);
             }

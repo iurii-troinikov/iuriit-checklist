@@ -24,13 +24,20 @@ class ToDo
      * @ORM\Column(type="string", length=100)
      */
 
-    private $text;
+    private string $text;
 
     /**
      * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="toDos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $checklist;
+    private Checklist $checklist;
+
+    public function __construct(string $text, Checklist $checklist)
+    {
+        $this->text = $text;
+        $this->checklist = $checklist;
+    }
+
 
     public function getId(): int
     {
@@ -50,12 +57,12 @@ class ToDo
         return $this;
     }
 
-    public function getChecklist(): ?Checklist
+    public function getChecklist(): Checklist
     {
         return $this->checklist;
     }
 
-    public function setChecklist(?Checklist $checklist): self
+    public function setChecklist(Checklist $checklist): self
     {
         $this->checklist = $checklist;
 
