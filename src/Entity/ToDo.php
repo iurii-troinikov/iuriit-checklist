@@ -26,6 +26,12 @@ class ToDo
 
     private $text;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="toDos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $checklist;
+
     public function getId(): int
     {
         return $this->id;
@@ -40,6 +46,18 @@ class ToDo
     public function setText(string $text): self
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    public function getChecklist(): ?Checklist
+    {
+        return $this->checklist;
+    }
+
+    public function setChecklist(?Checklist $checklist): self
+    {
+        $this->checklist = $checklist;
 
         return $this;
     }
