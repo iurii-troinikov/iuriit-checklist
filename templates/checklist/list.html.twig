@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}List All Notes {% endblock %}
+{% block title %}List All Todoes {% endblock %}
 
 {% block body %}
     <ul>
-    {% for note in notes %}
+    {% for todo in todoes %}
         <li>
             <h4>
-               <a href="{{ path('checklist_get', {'categoryId': note.category_id, 'noteId': note.id}) }}">
-                                {{ note.title }}
+               <a href="{{ path('checklist_get', {'checklistId': todo.checklist_id, 'todoId': todo.id}) }}">
+
                </a>
             </h4>
-            <p>{{ note.id }} {{ note.title }} {{ note.text }}</p>
+            <p>{{ todo.id }} {{ todo.text }}</p>
 
         </li>
     {% endfor %}

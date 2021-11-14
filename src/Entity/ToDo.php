@@ -6,9 +6,9 @@ use App\Repository\NoteRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=NoteRepository::class)
+ * @ORM\Entity(repositoryClass=ToDoRepository::class)
  */
-class Note
+class ToDo
 {
     /**
      * @ORM\Id
@@ -21,12 +21,7 @@ class Note
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $title;
 
-    /**
-     * @var string
-     * @ORM\Column(type="text")
-     */
     private $text;
 
     public function getId(): int
@@ -34,17 +29,6 @@ class Note
         return $this->id;
     }
 
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
 
     public function getText(): string
     {

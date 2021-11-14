@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 namespace App\Controller;
-use App\Entity\Category;
-use App\Entity\Note;
-use App\Repository\NoteRepository;
+use App\Entity\Checklist;
+use App\Entity\ToDo;
+use App\Repository\ToDoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,99 +15,89 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChecklistController extends AbstractController
 {
 
-    private NoteRepository $noteRepository;
+    private ToDoRepository $todoRepository;
 
-    public function __construct(NoteRepository $noteRepository)
+    public function __construct(ToDoRepository $todoRepository)
     {
-        $this->noteRepository = $noteRepository;
+        $this->todoRepository = $todoRepository;
     }
 
- //   private CategoryRepository $categoryRepository;
 
- //   public function CategoryRepository(CategoryRepository $categoryRepository)
- //   {
-  //      $this->categoryRepository = $categoryRepository;
- //   }
-
-
-
-
-    private array $categories = [
+    private array $checklists = [
         1 => [
             'title' => 'My summer weekends',
-            'notes' => [1, 2, 3]
+            'todoes' => [1, 2, 3]
         ],
         2 => [
             'title' => 'My favorite books review',
-            'notes' => [4, 5, 6]
+            'todoes' => [4, 5, 6]
         ],
         3 => [
             'title' => 'My friends hobbies',
-            'notes' => [7, 8, 9]
+            'todoes' => [7, 8, 9]
         ]
 
     ];
 
-    private array $notes = [
+    private array $todoes = [
         1 => [
             'id' => 1,
-            'title' => 'Some note 1',
             'text' => 'Loren ipsun 1',
-            'category_id' => 1
+            'checklist_id' => 1,
+            'done' => true
         ],
         2 => [
             'id' => 2,
-            'title' => 'Some note 2',
             'text' => 'Loren ipsun 2',
-            'category_id' => 1
+            'checklist_id' => 1,
+            'done' => true
         ],
         3 => [
             'id' => 3,
-            'title' => 'Some note 3',
             'text' => 'Loren ipsun 3',
-            'category_id' => 1
+            'checklist_id' => 1,
+            'done' => true
 
         ],
         4 => [
             'id' => 4,
-            'title' => 'Some note 4',
             'text' => 'Loren ipsun 4',
-            'category_id' => 2
+            'checklist_id' => 2,
+            'done' => true
 
         ],
         5 => [
             'id' => 5,
-            'title' => 'Some note 5',
             'text' => 'Loren ipsun 5',
-            'category_id' => 2
+            'checklist_id' => 2,
+            'done' => false
 
         ],
         6 => [
             'id' => 6,
-            'title' => 'Some note 6',
             'text' => 'Loren ipsun 6',
-            'category_id' => 2
-
+            'checklist_id' => 2,
+            'done' => false
         ],
         7 => [
             'id' => 7,
-            'title' => 'Some note 7',
             'text' => 'Loren ipsun 7',
-            'category_id' => 3
+            'checklist_id' => 3,
+            'done' => false
 
         ],
         8 => [
             'id' => 8,
-            'title' => 'Some note 8',
             'text' => 'Loren ipsun 8',
-            'category_id' => 3
+            'checklist_id' => 3,
+            'done' => false
 
         ],
         9 => [
             'id' => 9,
-            'title' => 'Some note 9',
             'text' => 'Loren ipsun 9',
-            'category_id' => 3
+            'checklist_id' => 3,
+            'done' => true
 
         ]
 
@@ -121,56 +111,56 @@ class ChecklistController extends AbstractController
     {
 
         return $this->render('checklist/list.html.twig', [
-            'notes' => $this->notes,
+            'todoes' => $this->todoes,
         ]);
     }
 
     /**
-     * @Route("/{categoryId}", name="list_by_category", requirements={"categoryId"="\d+"})
+     * @Route("/{checklist{Id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
      */
-    public function listByCategory(string $categoryId): Response
+    public function listByChecklist(string $checklistId): Response
     {
-        if (!isset($this->categories[(int)$categoryId])) {
-            throw new Exception('You ask for category that not exists');
+        if (!isset($this->checklists[(int)$checklistId])) {
+            throw new Exception('You ask for checklist that not exists');
         }
 
-        $category = $this->categories[(int)$categoryId] ?? null;
-        $notesIds = $category['notes'];
+        $checklist = $this->checklists[(int)$checklistId] ?? null;
+        $todoesIds = $checklist['todoes'];
 
-        $notes = array_filter($this->notes, function (array $note) use ($notesIds) {
-            return in_array($note['id'], $notesIds, true);
+        $todoes = array_filter($this->todoes, function (array $todo) use ($todoesIds) {
+            return in_array($todo['id'], $todoesIds, true);
         });
 
         return $this->render('checklist/list.html.twig', [
-            'notes' => $notes
+            'todoes' => $todoes
         ]);
     }
 
     /**
-     * @Route("/{categoryId}/{noteId}", name="get", requirements={"categoryId"="\d+", "noteId"="\d+"})
+     * @Route("/{checklistId}/{todoId}", name="get", requirements={"checklistId"="\d+", "todoId"="\d+"})
      */
-    public function getAction(string $categoryId, string $noteId): Response
+    public function getAction(string $checklistId, string $todoId): Response
     {
 
-        if (!isset($this->categories[(int)$categoryId])) {
-            throw new Exception('You ask for category that not exists');
+        if (!isset($this->checklists[(int)$checklistId])) {
+            throw new Exception('You ask for checklist that not exists');
         }
 
-        $category = $this->categories[(int)$categoryId] ?? null;
-        $notesIds = $category['notes'];
+        $checklist = $this->checklists[(int)$checklistId] ?? null;
+        $todoesIds = $checklist['todoes'];
 
-        $notes = array_filter($this->notes, function (array $note) use ($notesIds) {
-            return in_array($note['id'], $notesIds, true);
+        $todoes = array_filter($this->todoes, function (array $todo) use ($todoesIds) {
+            return in_array($todo['id'], $todoesIds, true);
         });
-        if (!isset($notes[(int)$noteId])) {
-            throw new Exception('There is no note in selected category');
+        if (!isset($todoes[(int)$todoId])) {
+            throw new Exception('There is no todo in selected checklist');
         }
 
 
-        $note = $notes[(int)$noteId];
+        $todo = $todoes[(int)$todoId];
 
         return $this->render('checklist/get.html.twig', [
-            'note' => $note
+            'todo' => $todo
         ]);
     }
 
@@ -180,85 +170,85 @@ class ChecklistController extends AbstractController
     public function createAction(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $newNote = new Note();
-        $newNote
-            ->setTitle('New note title')
-            ->setText('New note text');
+        $newToDo = new ToDo();
+        $newToDo
 
-        $entityManager->persist($newNote);
+            ->setText('New todo text');
+
+        $entityManager->persist($newToDo);
         $entityManager->flush();
 
 
-        $notes = $this->noteRepository->findAll();
+        $todoes = $this->todoRepository->findAll();
 
 
         return $this->render('checklist/list.html.twig', [
-            'notes' => $notes,
+            'todoes' => $todoes,
         ]);
     }
 
     /**
-     * @Route("/delete_note/{id}", name="delete_note")
+     * @Route("/delete_todo/{id}", name="delete_todo")
      */
 
     public function deleteAction(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $noteToDelete = $this->noteRepository->find($id);
-        $entityManager->remove($noteToDelete);
+        $todoToDelete = $this->todoRepository->find($id);
+        $entityManager->remove($todoToDelete);
         $entityManager->flush();
 
-        return $this->render('checklist/delete_note.html.twig', [
+        return $this->render('checklist/delete_todo.html.twig', [
             'id' => $id,
         ]);
     }
 
     /**
-     * @Route("/create_note/{id}", name="create_note")
+     * @Route("/create_todo/{id}", name="create_todo")
      */
 
-    public function createNoteAction(int $id): Response
+    public function createToDoAction(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $newNote = new Note();
-        $newNote
-            ->setTitle('New note title')
-            ->setText('New note text');
+        $newToDo = new ToDo();
+        $newToDo
 
-        $entityManager->persist($newNote);
+            ->setText('New todo text');
+
+        $entityManager->persist($newToDo);
         $entityManager->flush();
 
 
-        $notes = $this->noteRepository->findAll();
+        $todoes = $this->todoRepository->findAll();
 
 
-        return $this->render('checklist/create_note/list.html.twig', [
-            'notes' => $newNote,
+        return $this->render('checklist/create_todo/list.html.twig', [
+            'todoes' => $newToDo,
         ]);
     }
 
 
     /**
-     * @Route("/create_category/{id}", name="create_category")
+     * @Route("/create_checklist/{id}", name="create_checklist")
      */
 
-    public function createCategoryAction(int $id): Response
+    public function createChecklistAction(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $newCategory = new Category();
-        $newCategory
-            ->setTitle('New category title')
-            ->setNotes('New category note');
+        $newChecklist = new Checklist();
+        $newChecklist
+            ->setTitle('New Checklist title')
+            ->setNotes('New Checklist note');
 
-        $entityManager->persist($newCategory);
+        $entityManager->persist($newChecklist);
         $entityManager->flush();
 
 
-        $categories = $this->categoryRepository->findAll();
+        $checklists = $this->checklistRepository->findAll();
 
 
-        return $this->render('checklist/create_category/list.html.twig', [
-            'categories' => $newCategory,
+        return $this->render('checklist/create_checklist/list.html.twig', [
+            'checklists' => $newChecklist,
         ]);
     }
 }
