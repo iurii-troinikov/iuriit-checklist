@@ -11,7 +11,12 @@
 
                </a>
             </h4>
-            <p>{{ todo.id }} {{ todo.text }}</p>
+            <p>
+                {% if not todo.done %}~ {% endif %}
+                {{ todo.id }} {{ todo.text }}
+            </p>
+
+
 
         </li>
     {% endfor %}
