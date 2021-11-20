@@ -3,12 +3,12 @@
 {% block title %}List All Todoes{% endblock %}
 
 {% block body %}
-            <h4>
-                <a href="{{ path('checklist_get', {'checklistId': todo.checklist_id, 'todoId': todo.id}) }}">
 
-                </a>
-            </h4>
-            <p>{{ todo.text }}</p>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">{{ todo.text }}</p>
+        </div>
+    </div>
 
 {% endblock %}
 

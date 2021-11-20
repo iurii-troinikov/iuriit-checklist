@@ -110,7 +110,7 @@ class ChecklistController extends AbstractController
 
 
     /**
-     * @Route(name="dfg")
+     * @Route(name="list_all")
      */
     public function listAll(): Response
     {

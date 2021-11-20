@@ -3,23 +3,18 @@
 {% block title %}List All Todos {% endblock %}
 
 {% block body %}
-    <ul>
+
     {% for todo in todos %}
-        <li>
-            <h4>
-               <a href="{{ path('checklist_get', {'checklistId': todo.checklist_id, 'todoId': todo.id}) }}">
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text">{{ todo.text }}</p>
+                <a href="{{ path('checklist_get', {'todoId': todo.id, 'checklistId':todo.checklist_id}) }}" class="btn btn-warning">
+                    Read
+                </a>
+            </div>
+        </div>
 
-               </a>
-            </h4>
-            <p>
-                {% if not todo.done %}~ {% endif %}
-                {{ todo.id }} {{ todo.text }}
-            </p>
-
-
-
-        </li>
     {% endfor %}
-    </ul>
+
 {% endblock %}
 
