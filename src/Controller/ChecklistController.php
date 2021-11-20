@@ -25,16 +25,19 @@ class ChecklistController extends AbstractController
     }
 
 
-    private array $checklists = [
+    public static array $checklists = [
         1 => [
+            'id' => 1,
             'title' => 'My summer weekends',
             'todos' => [1, 2, 3]
         ],
         2 => [
+            'id' => 2,
             'title' => 'My favorite books review',
             'todos' => [4, 5, 6]
         ],
         3 => [
+            'id' => 3,
             'title' => 'My friends hobbies',
             'todos' => [7, 8, 9]
         ]
@@ -107,7 +110,7 @@ class ChecklistController extends AbstractController
 
 
     /**
-     * @Route(name="list_all")
+     * @Route(name="dfg")
      */
     public function listAll(): Response
     {
@@ -122,11 +125,11 @@ class ChecklistController extends AbstractController
      */
     public function listByChecklist(string $checklistId): Response
     {
-        if (!isset($this->checklists[(int)$checklistId])) {
+        if (!isset(self::$checklists[(int)$checklistId])) {
             throw new Exception('You ask for checklist that not exists');
         }
 
-        $checklist = $this->checklists[(int)$checklistId] ?? null;
+        $checklist = self::$checklists[(int)$checklistId] ?? null;
         $todosIds = $checklist['todos'];
 
         $todos = array_filter($this->todos, function (array $todo) use ($todosIds) {
@@ -144,11 +147,11 @@ class ChecklistController extends AbstractController
     public function getAction(string $checklistId, string $todoId): Response
     {
 
-        if (!isset($this->checklists[(int)$checklistId])) {
+        if (!isset(self::$checklists[(int)$checklistId])) {
             throw new Exception('You ask for checklist that not exists');
         }
 
-        $checklist = $this->checklists[(int)$checklistId] ?? null;
+        $checklist = self::$checklists[(int)$checklistId] ?? null;
         $todosIds = $checklist['todos'];
 
         $todos = array_filter($this->todos, function (array $todo) use ($todosIds) {

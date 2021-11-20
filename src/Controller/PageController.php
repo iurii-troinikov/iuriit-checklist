@@ -15,6 +15,7 @@ class PageController extends AbstractController
      */
     public function index(): Response
     {
-       return $this->redirectToRoute('checklist_list_all');
+
+       return self::$checklists->redirectToRoute('checklist_list_all');
     }
 }
