@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\NoteRepository;
+use App\Repository\ToDoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ToDoRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\ToDoRepository", repositoryClass=ToDoRepository::class)
  */
+
 class ToDo
 {
     /**
@@ -17,7 +18,7 @@ class ToDo
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string

@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Controller\ChecklistController;
+use App\Entity\Checklist;
+use Doctrine\ORM\EntityManagerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class TemplateExtension extends AbstractExtension
 {
+
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
 
     public function getFunctions(): array
     {
@@ -20,6 +28,8 @@ class TemplateExtension extends AbstractExtension
 
     public function getChecklists(): array
     {
-return ChecklistController::$checklists;
+
+return  $this->em->getRepository(Checklist::class)->findAll();
+
     }
 }
