@@ -8,6 +8,7 @@ use App\Repository\ToDoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -18,6 +19,7 @@ class ChecklistController extends AbstractController
 {
 
     private ToDoRepository $todoRepository;
+    private $ChecklistRepository;
 
     public function __construct(ToDoRepository $todoRepository)
     {
@@ -90,19 +92,27 @@ class ChecklistController extends AbstractController
     }
 
     /**
-     * @Route("/delete_todo/{id}", name="delete_todo")
+     * @Route("/delete/{id}", name="delete")
      */
 
-    public function deleteAction(int $id): Response
+    public function deleteAction(int $id, EntityManagerInterface $entityManager): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+
         $todoToDelete = $this->todoRepository->find($id);
+
+        if ($todoToDelete) {
+
+            throw new NotFoundHttpException('Todo not found');
+        }
+
+
         $entityManager->remove($todoToDelete);
         $entityManager->flush();
 
-        return $this->render('checklist/delete_todo.html.twig', [
-            'id' => $id,
-        ]);
+        $this->addFlash('success', sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
+
+        return $this->redirectToRoute('checklist_list_all');
+
     }
 
     /**

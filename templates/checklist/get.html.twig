@@ -8,6 +8,11 @@
         <div class="card-body">
             <p class="card-text">{{ todo.text }}</p>
         </div>
+        <div class="card.header">
+            <a class="btn btn-danger float-end" href="{{ path('checklist_delete', {'id': todo.id}) }}" role="button">
+                Delete :(
+            </a>
+        </div>
     </div>
 
 {% endblock %}
