@@ -7,6 +7,7 @@ use App\Entity\ToDo;
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +26,6 @@ class ChecklistController extends AbstractController
     {
         $this->todoRepository = $todoRepository;
     }
-
 
     /**
      * @Route(name="list_all")
@@ -69,26 +69,36 @@ class ChecklistController extends AbstractController
     }
 
     /**
-     * @Route("/create", name="create")
+     * @Route("/create", name="create", methods={"GET", "POST"})
      */
-    public function createAction(): Response
+    public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $newToDo = new ToDo();
-        $newToDo
+        if ($request->getMethod() === 'GET') {
 
-            ->setText('New todo text');
+            $checklists = $em->getRepository(Checklist::class)->findAll();
 
-        $entityManager->persist($newToDo);
-        $entityManager->flush();
+            return $this->render('checklist/create.html.twig', [
+                'checklists' => $checklists
+            ]);
+        }
 
+        $text = (string) $request->request->get('text');
+        $checklistId = (int) $request->request->get('checklist_id');
+        $checklist = $em->getRepository(Checklist::class)->find($checklistId);
 
-        $todos = $this->todoRepository->findAll();
+        if (!$checklist) {
+            throw new NotFoundHttpException('Checklist not found');
+        }
 
+         $todo = new ToDo($text, $checklist);
 
-        return $this->render('checklist/list.html.twig', [
-            'todos' => $todos,
-        ]);
+        $em->persist($todo);
+        $em->flush();
+
+        $this->addFlash('success', sprintf('Todo "%s" was created', $todo->getText()));
+
+        return $this->redirectToRoute('checklist_create');
+
     }
 
     /**
@@ -104,7 +114,6 @@ class ChecklistController extends AbstractController
 
             throw new NotFoundHttpException('Todo not found');
         }
-
 
         $entityManager->remove($todoToDelete);
         $entityManager->flush();
@@ -130,15 +139,12 @@ class ChecklistController extends AbstractController
         $entityManager->persist($newToDo);
         $entityManager->flush();
 
-
         $todos = $this->todoRepository->findAll();
-
 
         return $this->render('checklist/create_todo/list.html.twig', [
             'todos' => $newToDo,
         ]);
     }
-
 
     /**
      * @Route("/create_checklist/{id}", name="create_checklist")
@@ -151,13 +157,10 @@ class ChecklistController extends AbstractController
         $newChecklist
             ->setTitle('New Checklist title');
 
-
         $entityManager->persist($newChecklist);
         $entityManager->flush();
 
-
         $checklists = $this->ChecklistRepository->findAll();
-
 
         return $this->render('checklist/create_checklist/list.html.twig', [
             'checklists' => $newChecklist,
