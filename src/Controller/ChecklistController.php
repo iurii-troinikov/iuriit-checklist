@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
+use App\Repository\ChecklistRepository;
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ class ChecklistController extends AbstractController
 {
 
     private ToDoRepository $todoRepository;
-    private $ChecklistRepository;
+    private ChecklistRepository $checklistRepository;
 
     public function __construct(ToDoRepository $todoRepository)
     {
@@ -107,65 +108,38 @@ class ChecklistController extends AbstractController
 
     public function deleteAction(int $id, EntityManagerInterface $entityManager): Response
     {
-
         $todoToDelete = $this->todoRepository->find($id);
-
-        if ($todoToDelete) {
-
+        if (!$todoToDelete) {
             throw new NotFoundHttpException('Todo not found');
         }
 
         $entityManager->remove($todoToDelete);
         $entityManager->flush();
-
         $this->addFlash('success', sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
-
         return $this->redirectToRoute('checklist_list_all');
-
     }
 
-    /**
-     * @Route("/create_todo/{id}", name="create_todo")
-     */
 
-    public function createToDoAction(int $id): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $newToDo = new ToDo();
-        $newToDo
+//    /**
+ //    * @Route("/create_checklist/{id}", name="create_checklist")
+ //    */
 
-            ->setText('New todo text');
+ //   public function createChecklistAction(int $id): Response
+ //   {
+  //      $entityManager = $this->getDoctrine()->getManager();
+  //      $newChecklist = new Checklist();
+  //      $newChecklist
+  //          ->setTitle('New Checklist title');
 
-        $entityManager->persist($newToDo);
-        $entityManager->flush();
+  //      $entityManager->persist($newChecklist);
+  //      $entityManager->flush();
 
-        $todos = $this->todoRepository->findAll();
+   //     $checklists = $this->ChecklistRepository->findAll();
 
-        return $this->render('checklist/create_todo/list.html.twig', [
-            'todos' => $newToDo,
-        ]);
-    }
-
-    /**
-     * @Route("/create_checklist/{id}", name="create_checklist")
-     */
-
-    public function createChecklistAction(int $id): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $newChecklist = new Checklist();
-        $newChecklist
-            ->setTitle('New Checklist title');
-
-        $entityManager->persist($newChecklist);
-        $entityManager->flush();
-
-        $checklists = $this->ChecklistRepository->findAll();
-
-        return $this->render('checklist/create_checklist/list.html.twig', [
-            'checklists' => $newChecklist,
-        ]);
-    }
+   //     return $this->render('checklist/create_checklist/list.html.twig', [
+   //         'checklists' => $newChecklist,
+  //      ]);
+  //  }
 }
 
 

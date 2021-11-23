@@ -22,7 +22,6 @@ class Checklist
      */
     private int $id;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      */

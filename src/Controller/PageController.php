@@ -19,3 +19,4 @@ class PageController extends AbstractController
        return $this->redirectToRoute('checklist_list_all');
     }
 }
+
