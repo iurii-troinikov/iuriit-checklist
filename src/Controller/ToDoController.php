@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Checklist;
 use App\Entity\ToDo;
+use App\Enum\FlashMessagesEnum;
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,7 +96,7 @@ class ToDoController extends AbstractController
         $em->persist($todo);
         $em->flush();
 
-        $this->addFlash('success', sprintf('Todo "%s" was created', $todo->getText()));
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $todo->getText()));
 
         return $this->redirectToRoute('checklist_create');
 
@@ -114,7 +115,7 @@ class ToDoController extends AbstractController
 
         $entityManager->remove($todoToDelete);
         $entityManager->flush();
-        $this->addFlash('success', sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
         return $this->redirectToRoute('checklist_list_all');
     }
 

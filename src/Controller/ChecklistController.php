@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Checklist;
+use App\Enum\FlashMessagesEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class ChecklistController extends AbstractController
        $em->persist (new Checklist($name));
        $em->flush();
 
-       $this->addFlash('success', sprintf('Checklist %s was created', $name));
+       $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $name));
 
        return $this->redirectToRoute('page_home');
     }
@@ -45,7 +46,7 @@ class ChecklistController extends AbstractController
         $em->remove($checklist);
         $em->flush();
 
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Category %s was removed', $checklist->getTitle()));
+        $this->addFlash( FlashMessagesEnum::SUCCESS, sprintf('Category %s was removed', $checklist->getTitle()));
 
         return $this->redirectToRoute('page_home');
     }
