@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChecklistRepository", repositoryClass=ChecklistRepository::class)
  */
-
 class Checklist
 {
     /**
@@ -21,40 +20,32 @@ class Checklist
      * @ORM\Column(type="integer")
      */
     private int $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private string $title;
-
     /**
      * @ORM\OneToMany(targetEntity=ToDo::class, mappedBy="checklist", orphanRemoval=true)
      */
     private Collection $toDos;
-
     public function __construct(string $title)
     {
         $this->title = $title;
         $this->toDos = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getTitle(): string
     {
         return $this->title;
     }
-
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
         return $this;
     }
-
     /**
      * @return Collection|ToDo[]
      */
@@ -62,26 +53,21 @@ class Checklist
     {
         return $this->toDos;
     }
-
     public function addToDo(ToDo $toDo): self
     {
         if (!$this->toDos->contains($toDo)) {
             $this->toDos[] = $toDo;
             $toDo->setChecklist($this);
         }
-
         return $this;
     }
-
     public function removeToDo(ToDo $toDo): self
     {
         if ($this->toDos->removeElement($toDo)) {
-
             if ($toDo->getChecklist() === $this) {
                 $toDo->setChecklist(null);
             }
         }
-
         return $this;
     }
 }
