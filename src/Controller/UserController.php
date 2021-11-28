@@ -7,11 +7,13 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Enum\FlashMessagesEnum;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,10 +47,9 @@ class UserController extends AbstractController
             foreach ($passwordErrors as $error) {
                 $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
             }
+
             return $this->redirectToRoute('page_home');
         }
-
-
 
         $username = $request->request->get('username');
         /** @var ConstraintViolationList $passwordErrors */
@@ -76,7 +77,7 @@ class UserController extends AbstractController
         );
         $user->setPassword($hashedPassword);
 
-           // TODO: investigate why User validation doesn't work properly
+        // TODO: investigate why it doesn't work properly
         $userErrors = $validator->validate($user);
         foreach ($userErrors as $error) {
             $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
@@ -87,8 +88,30 @@ class UserController extends AbstractController
             $em->flush();
 
             $this->addFlash(FlashMessagesEnum::SUCCESS, "You have been registered!");
-    }
+        }
+
         return $this->redirectToRoute('page_home');
-
     }
 
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $this->addFlash(FlashMessagesEnum::FAIL, $error
+            ? $error->getMessage()
+            : 'You should be authenticated'
+        );
+
+        return $this->redirectToRoute('page_home');
+    }
+
+    /**
+     * @Route("/logout", name="logout", methods={"GET"})
+     */
+    public function logout(): void
+    {
+        throw new Exception('Unreachable statement');
+    }
+}
