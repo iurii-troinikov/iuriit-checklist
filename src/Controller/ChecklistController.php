@@ -37,7 +37,7 @@ class ChecklistController extends AbstractController
         }
 
         if (!$errors->count()) {
-            $em->persist (new Checklist($name));
+            $em->persist ($checklist);
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $name));
 
