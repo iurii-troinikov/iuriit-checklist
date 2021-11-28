@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/checklist", name="checklist_")
@@ -22,15 +24,26 @@ class ChecklistController extends AbstractController
     /**
      * @Route(name="add", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
        $name = $request->request->get('name');
-       $em->persist (new Checklist($name));
-       $em->flush();
+       $checklist = new Checklist($name);
 
-       $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $name));
+       /** @var ConstraintViolationList $errors */
+       $errors = $validator->validate($checklist);
+        foreach ($errors as $error) {
+            $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
 
-       return $this->redirectToRoute('page_home');
+        }
+
+        if (!$errors->count()) {
+            $em->persist (new Checklist($name));
+            $em->flush();
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $name));
+
+        }
+        return $this->redirectToRoute('page_home');
+
     }
 
     /**

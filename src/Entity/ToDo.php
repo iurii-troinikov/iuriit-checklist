@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ToDoRepository", repositoryClass=ToDoRepository::class)
@@ -18,13 +20,18 @@ class ToDo
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
-     * @var string
+     * @Assert\NotBlank(message="ToDo text should not be blank")
+     * @Assert\Length(
+     *      min = 30,
+     *      max = 254,
+     *      minMessage = "ToDo text should be at least {{ limit }} characters long",
+     *      maxMessage = "ToDo text cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string", length=100)
      */
-
     private string $text;
 
     /**

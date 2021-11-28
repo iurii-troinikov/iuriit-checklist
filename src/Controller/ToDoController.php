@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/checklist", name="checklist_")
@@ -72,7 +74,7 @@ class ToDoController extends AbstractController
     /**
      * @Route("/create", name="create", methods={"GET", "POST"})
      */
-    public function createAction(Request $request, EntityManagerInterface $em): Response
+    public function createAction(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
         if ($request->getMethod() === 'GET') {
 
@@ -91,12 +93,21 @@ class ToDoController extends AbstractController
             throw new NotFoundHttpException('Checklist not found');
         }
 
-         $todo = new ToDo($text, $checklist);
+        $todo = new ToDo($text, $checklist);
 
-        $em->persist($todo);
-        $em->flush();
+        /** @var ConstraintViolationList $errors */
+        $errors = $validator->validate($todo);
+        foreach ($errors as $error) {
+            $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
 
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $todo->getText()));
+        }
+
+        if (!$errors->count()) {
+            $em->persist($todo);
+            $em->flush();
+
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $todo->getText()));
+        }
 
         return $this->redirectToRoute('checklist_create');
 
