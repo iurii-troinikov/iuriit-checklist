@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List All Todos {% endblock %}
+
+{% block body %}
+
+    {% for todo in todos %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text">{{ todo.text }}</p>
+                <a href="{{ path('checklist_get', {'todoId': todo.id, 'checklistId': todo.checklist.id}) }}" class="btn btn-warning">
+                    Read
+                </a>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
+
