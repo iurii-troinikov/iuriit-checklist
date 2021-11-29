@@ -20,6 +20,5 @@ class ChecklistRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Checklist::class);
     }
-
 }
 

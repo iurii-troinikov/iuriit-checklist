@@ -3,7 +3,6 @@
 {% block title %}Add new Todo{% endblock %}
 
 {% block body %}
-
     <div class="card">
         <h5 class="card-header">Add new todo</h5>
         <div class="card-body">
@@ -15,11 +14,9 @@
                 <div class="col-12">
                     <label for="inputChecklist" class="form-label">Checklist</label>
                     <select id="inputChecklist" class="form-select" name="checklist_id">
-
                         {% for checklist in checklists %}
                             <option value="{{ checklist.id }}">{{ checklist.title }}</option>
                         {% endfor %}
-
                     </select>
                 </div>
                 <div class="col-12">
@@ -28,5 +25,4 @@
             </form>
         </div>
     </div>
-
 {% endblock %}

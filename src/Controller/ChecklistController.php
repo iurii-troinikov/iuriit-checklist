@@ -17,10 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * @Route("/checklist", name="checklist_")
  */
-
 class ChecklistController extends AbstractController
 {
-
     /**
      * @Route(name="add", methods={"POST"})
      */
@@ -33,19 +31,14 @@ class ChecklistController extends AbstractController
        $errors = $validator->validate($checklist);
         foreach ($errors as $error) {
             $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
-
         }
-
         if (!$errors->count()) {
             $em->persist ($checklist);
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $name));
-
         }
         return $this->redirectToRoute('page_home');
-
     }
-
     /**
      * @Route("/{checklistId}", name="delete", requirements={"checklistId"="\d+"})
      */
@@ -55,14 +48,10 @@ class ChecklistController extends AbstractController
         if (!$checklist) {
             throw new NotFoundHttpException('Checklist not found');
         }
-
         $em->remove($checklist);
         $em->flush();
-
         $this->addFlash( FlashMessagesEnum::SUCCESS, sprintf('Category %s was removed', $checklist->getTitle()));
-
         return $this->redirectToRoute('page_home');
     }
-
 }
 

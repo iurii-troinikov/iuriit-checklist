@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * * @UniqueEntity("username")
  *
@@ -24,7 +23,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;
-
     /**
      * @Assert\NotBlank(message="Username should not be blank")
      * @Assert\Length(
@@ -36,29 +34,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $username;
-
     /**
      * @ORM\Column(type="json")
      */
     private array $roles = [];
-
     /**
      * The hashed password
      *
      * @ORM\Column(type="string")
      */
     private string $password;
-
     public function __construct(string $username)
     {
         $this->username = $username;
     }
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
@@ -66,14 +59,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
-
     public function setUsername(string $username): self
     {
         $this->username = $username;
-
         return $this;
     }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -83,26 +73,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
-
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
-
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
-
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -110,14 +94,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->password;
     }
-
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
-
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -128,13 +109,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return null;
     }
-
     /**
      * @see UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 }

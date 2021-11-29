@@ -8,5 +8,4 @@ class FlashMessagesEnum
 {
     const SUCCESS = 'success';
     const FAIL = 'fail';
-
 }

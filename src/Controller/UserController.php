@@ -47,10 +47,8 @@ class UserController extends AbstractController
             foreach ($passwordErrors as $error) {
                 $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
             }
-
             return $this->redirectToRoute('page_home');
         }
-
         $username = $request->request->get('username');
         /** @var ConstraintViolationList $passwordErrors */
         $usernameErrors = $validator->validate($username, [
@@ -66,10 +64,8 @@ class UserController extends AbstractController
             foreach ($usernameErrors as $error) {
                 $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
             }
-
             return $this->redirectToRoute('page_home');
         }
-
         $user = new User($username);
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
@@ -82,17 +78,13 @@ class UserController extends AbstractController
         foreach ($userErrors as $error) {
             $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
         }
-
         if (!$userErrors->count()) {
             $em->persist($user);
             $em->flush();
-
             $this->addFlash(FlashMessagesEnum::SUCCESS, "You have been registered!");
         }
-
         return $this->redirectToRoute('page_home');
     }
-
     /**
      * @Route("/login", name="login")
      */
@@ -103,10 +95,8 @@ class UserController extends AbstractController
             ? $error->getMessage()
             : 'You should be authenticated'
         );
-
         return $this->redirectToRoute('page_home');
     }
-
     /**
      * @Route("/logout", name="logout", methods={"GET"})
      */
