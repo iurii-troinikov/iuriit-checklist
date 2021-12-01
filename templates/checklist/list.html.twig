@@ -7,7 +7,7 @@
         <div class="card mb-3">
             <div class="card-body">
                 <p class="card-text">{{ todo.text }}</p>
-                <a href="{{ path('checklist_get', {'todoId': todo.id, 'checklistId': todo.checklist.id}) }}" class="btn btn-warning">
+                <a href="{{ path('todo_get', {'todoId': todo.id, 'checklistId': todo.checklist.id}) }}" class="btn btn-warning">
                     Read
                 </a>
             </div>

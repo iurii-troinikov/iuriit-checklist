@@ -31,7 +31,7 @@
                         <a class="nav-link" aria-current="page" href="{{ path('page_home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ path('checklist_create') }}">Add new ToDo</a>
+                        <a class="nav-link" aria-current="page" href="{{ path('todo_create') }}">Add new ToDo</a>
                     </li>
                     {% if app.user %}
                         <li class="nav-item">
@@ -45,7 +45,7 @@
     <div class="container app-sidebar">
     <div class="row">
         <div class="mt-3">
-            {% for message in app.flashes('succes') %}
+            {% for message in app.flashes('success') %}
                 <div class="alert alert-success" role="alert">
                     {{ message }}
                 </div>
@@ -95,12 +95,12 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-10">
-                            <a href="{{ path('checklist_list_by_checklist', {'checklistId': checklist.id }) }}">
+                            <a href="{{ path('todo_list_by_checklist', {'checklistId': checklist.id }) }}">
                                 {{ checklist.title }}
                             </a>
                             </div>
                                 <div class="col-2">
-                                    <a href="{{ path('checklist_delete', {'id': checklist.id}) }}" class="btn btn-danger p-1">
+                                    <a href="{{ path('checklist_delete', {'checklistId': checklist.id}) }}" class="btn btn-danger p-1">
                                         x
                                     </a>
                                     </div>

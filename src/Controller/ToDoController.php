@@ -17,7 +17,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * @Route("/checklist", name="checklist_")
+ * @Route("/todos", name="todo_")
  */
 
 class ToDoController extends AbstractController
@@ -90,7 +90,7 @@ class ToDoController extends AbstractController
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $todo->getText()));
         }
-        return $this->redirectToRoute('checklist_create');
+        return $this->redirectToRoute('todo_create');
     }
     /**
      * @Route("/delete/{id}", name="delete")
@@ -104,7 +104,7 @@ class ToDoController extends AbstractController
         $entityManager->remove($todoToDelete);
         $entityManager->flush();
         $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
-        return $this->redirectToRoute('checklist_list_all');
+        return $this->redirectToRoute('todo_list_all');
     }
 }
 

@@ -40,7 +40,7 @@ class ChecklistController extends AbstractController
         return $this->redirectToRoute('page_home');
     }
     /**
-     * @Route("/{checklistId}", name="delete", requirements={"checklistId"="\d+"})
+     * @Route("/delete/{checklistId}", name="delete", requirements={"checklistId"="\d+"})
      */
     public function delete(string $checklistId, EntityManagerInterface $em): Response
     {
