@@ -37,9 +37,16 @@ class Checklist
      * @ORM\OneToMany(targetEntity=ToDo::class, mappedBy="checklist", orphanRemoval=true)
      */
     private Collection $toDos;
-    public function __construct(string $title)
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private User $user;
+    public function __construct(string $title, User $user)
     {
         $this->title = $title;
+        $this->user = $user;
         $this->toDos = new ArrayCollection();
     }
     public function getId(): ?int
@@ -78,6 +85,18 @@ class Checklist
                 $toDo->setChecklist(null);
             }
         }
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
         return $this;
     }
 }
