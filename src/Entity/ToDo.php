@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\Ownable;
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ToDoRepository", repositoryClass=ToDoRepository::class)
  */
-class ToDo
+class ToDo implements Ownable
 {
     /**
      * @ORM\Id
@@ -37,7 +37,6 @@ class ToDo
      * @ORM\JoinColumn(nullable=false)
      */
     private Checklist $checklist;
-
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
@@ -73,16 +72,13 @@ class ToDo
         $this->checklist = $checklist;
         return $this;
     }
-
     public function getUser(): UserInterface
     {
         return $this->user;
     }
-
     public function setUser(UserInterface $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 }

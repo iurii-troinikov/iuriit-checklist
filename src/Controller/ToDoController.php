@@ -6,8 +6,8 @@ namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
-use App\Repository\ToDoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +18,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/todos", name="todo_")
+ * @IsGranted("ROLE_USER")
  */
-
 class ToDoController extends AbstractController
 {
-    private ToDoRepository $todoRepository;
-    public function __construct(ToDoRepository $todoRepository)
-    {
-        $this->todoRepository = $todoRepository;
-    }
     /**
      * @Route(name="list_all")
      */
@@ -38,6 +33,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/checklist/{id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
+     * @IsGranted("IS_OWNER", subject="checklist")
      */
     public function listByChecklist(Checklist $checklist, EntityManagerInterface $em): Response
     {
@@ -51,6 +47,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/{id}", name="get", requirements={"id"="\d+"})
+     * @IsGranted("IS_OWNER", subject="todo")
      */
     public function getAction(ToDo $todo): Response
     {
@@ -90,6 +87,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/delete/{id}", name="delete")
+     * @IsGranted("IS_OWNER", subject="todo")
      */
     public function deleteAction(ToDo $todo, EntityManagerInterface $entityManager): Response
     {

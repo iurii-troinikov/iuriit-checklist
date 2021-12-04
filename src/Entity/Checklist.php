@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\Ownable;
 use App\Repository\ChecklistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,8 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChecklistRepository", repositoryClass=ChecklistRepository::class)
  */
-
-class Checklist
+class Checklist implements Ownable
 {
     /**
      * @ORM\Id
@@ -38,7 +38,6 @@ class Checklist
      * @ORM\OneToMany(targetEntity=ToDo::class, mappedBy="checklist", orphanRemoval=true)
      */
     private Collection $toDos;
-
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
@@ -81,23 +80,19 @@ class Checklist
     public function removeToDo(ToDo $toDo): self
     {
         if ($this->toDos->removeElement($toDo)) {
-
             if ($toDo->getChecklist() === $this) {
                 $toDo->setChecklist(null);
             }
         }
         return $this;
     }
-
     public function getUser(): UserInterface
     {
         return $this->user;
     }
-
     public function setUser(UserInterface $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 }
