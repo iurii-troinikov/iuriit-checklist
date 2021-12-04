@@ -18,7 +18,6 @@ class PageController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('todo_list_all');
         }
-
         return $this->render('page/home.html.twig');
     }
 }

@@ -37,29 +37,23 @@ class ToDoController extends AbstractController
         ]);
     }
     /**
-     * @Route("/{checklistId}", name="list_by_checklist", requirements={"checklistId"="\d+"})
+     * @Route("/checklist/{id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
      */
-    public function listByChecklist(string $checklistId, EntityManagerInterface $em): Response
+    public function listByChecklist(Checklist $checklist, EntityManagerInterface $em): Response
     {
         $todos = $em->getRepository(ToDo::class)->findBy([
-            'checklist' => (int) $checklistId,
+            'checklist' => $checklist,
             'user' => $this->getUser()
         ]);
-
         return $this->render('checklist/list.html.twig', [
             'todos' => $todos
         ]);
     }
     /**
-     * @Route("/{checklistId}/{todoId}", name="get", requirements={"checklistId"="\d+", "todoId"="\d+"})
+     * @Route("/{id}", name="get", requirements={"id"="\d+"})
      */
-    public function getAction(string $checklistId, string $todoId, EntityManagerInterface $em): Response
+    public function getAction(ToDo $todo): Response
     {
-        $todo = $em->getRepository(ToDo::class)->findOneBy([
-            'checklist' => (int) $checklistId,
-            'id' => $todoId,
-            'user' => $this->getUser()
-        ]);
         return $this->render('checklist/get.html.twig', [
             'todo' => $todo
         ]);
@@ -97,15 +91,11 @@ class ToDoController extends AbstractController
     /**
      * @Route("/delete/{id}", name="delete")
      */
-    public function deleteAction(int $id, EntityManagerInterface $entityManager): Response
+    public function deleteAction(ToDo $todo, EntityManagerInterface $entityManager): Response
     {
-        $todoToDelete = $this->todoRepository->findOneBy(['id' => $id, 'user' => $this->getUser()]);
-        if (!$todoToDelete) {
-            throw new NotFoundHttpException('Todo not found');
-        }
-        $entityManager->remove($todoToDelete);
+        $entityManager->remove($todo);
         $entityManager->flush();
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todoToDelete->getText()));
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todo->getText()));
         return $this->redirectToRoute('todo_list_all');
     }
 }
