@@ -25,7 +25,7 @@ class ChecklistController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
        $name = $request->request->get('name');
-       $checklist = new Checklist($name);
+       $checklist = new Checklist($name, $this->getUser());
 
        /** @var ConstraintViolationList $errors */
        $errors = $validator->validate($checklist);
@@ -44,7 +44,7 @@ class ChecklistController extends AbstractController
      */
     public function delete(string $checklistId, EntityManagerInterface $em): Response
     {
-        $checklist = $em->getRepository(Checklist::class)->find($checklistId);
+        $checklist = $em->getRepository(Checklist::class)->findOneBy(['id' => $checklistId, 'user' => $this->getUser()]);
         if (!$checklist) {
             throw new NotFoundHttpException('Checklist not found');
         }

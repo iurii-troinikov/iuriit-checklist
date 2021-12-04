@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Checklist;
 use App\Entity\ToDo;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -18,16 +19,24 @@ class TodoFixtures extends Fixture
     ];
     public function load(ObjectManager $manager): void
     {
+        $users = [];
+        for ($i = 0; $i < 3; $i++) {
+            $user = new User("user $i");
+            $manager->persist($user);
+            $users[] = $user;
+        }
         $checklists = [];
         for ($i = 0; $i < 3; $i++) {
-            $checklist = new Checklist($this->checklistTitles[$i]);
+            $checklist = new Checklist($this->checklistTitles[$i], $users[$i]);
             $manager->persist($checklist);
             $checklists[] = $checklist;
         }
         for ($i = 0; $i <= 9; $i++) {
+            $checklist = $checklists[random_int(0, 2)];
             $todo = new ToDo(
                 'Loren ipsum' . $i,
-                $checklists[random_int(0, 2)]
+                $checklist,
+                $checklist->getUser()
             );
             $manager->persist($todo);
         }

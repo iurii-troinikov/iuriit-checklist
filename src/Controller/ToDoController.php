@@ -33,7 +33,7 @@ class ToDoController extends AbstractController
     public function listAll(EntityManagerInterface $em): Response
     {
         return $this->render('checklist/list.html.twig', [
-            'todos' => $em->getRepository(ToDo::class)->findAll()
+            'todos' => $em->getRepository(ToDo::class)->findBy(['user' => $this->getUser()])
         ]);
     }
     /**
@@ -42,7 +42,8 @@ class ToDoController extends AbstractController
     public function listByChecklist(string $checklistId, EntityManagerInterface $em): Response
     {
         $todos = $em->getRepository(ToDo::class)->findBy([
-            'checklist' => (int) $checklistId
+            'checklist' => (int) $checklistId,
+            'user' => $this->getUser()
         ]);
 
         return $this->render('checklist/list.html.twig', [
@@ -56,7 +57,8 @@ class ToDoController extends AbstractController
     {
         $todo = $em->getRepository(ToDo::class)->findOneBy([
             'checklist' => (int) $checklistId,
-            'id' => $todoId
+            'id' => $todoId,
+            'user' => $this->getUser()
         ]);
         return $this->render('checklist/get.html.twig', [
             'todo' => $todo
@@ -68,18 +70,18 @@ class ToDoController extends AbstractController
     public function createAction(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
         if ($request->getMethod() === 'GET') {
-            $checklists = $em->getRepository(Checklist::class)->findAll();
+            $checklists = $em->getRepository(Checklist::class)->findBy(['user' => $this->getUser()]);
             return $this->render('checklist/create.html.twig', [
                 'checklists' => $checklists
             ]);
         }
         $text = (string) $request->request->get('text');
         $checklistId = (int) $request->request->get('checklist_id');
-        $checklist = $em->getRepository(Checklist::class)->find($checklistId);
+        $checklist = $em->getRepository(Checklist::class)->findOneBy(['id' => $checklistId, 'user' => $this->getUser()]);
         if (!$checklist) {
             throw new NotFoundHttpException('Checklist not found');
         }
-        $todo = new ToDo($text, $checklist);
+        $todo = new ToDo($text, $checklist, $this->getUser());
         /** @var ConstraintViolationList $errors */
         $errors = $validator->validate($todo);
         foreach ($errors as $error) {
@@ -97,7 +99,7 @@ class ToDoController extends AbstractController
      */
     public function deleteAction(int $id, EntityManagerInterface $entityManager): Response
     {
-        $todoToDelete = $this->todoRepository->find($id);
+        $todoToDelete = $this->todoRepository->findOneBy(['id' => $id, 'user' => $this->getUser()]);
         if (!$todoToDelete) {
             throw new NotFoundHttpException('Todo not found');
         }

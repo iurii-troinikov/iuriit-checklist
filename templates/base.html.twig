@@ -30,10 +30,10 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ path('page_home') }}">Home</a>
                     </li>
+                    {% if app.user %}
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ path('todo_create') }}">Add new ToDo</a>
                     </li>
-                    {% if app.user %}
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ path('user_logout') }}">Logout</a>
                         </li>
@@ -86,6 +86,7 @@
                 </div>
             </div>
             {% endif %}
+            {% if app.user %}
             <div class="card w-100">
                 <div class="card-header">
                     <b>Checklists</b>
@@ -121,7 +122,7 @@
                     </li>
                 </ul>
             </div>
-
+            {% endif %}
         </div>
     </div>
 </div>

@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\ToDoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -41,8 +42,8 @@ class ToDo
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private User $user;
-    public function __construct(string $text, Checklist $checklist, User $user)
+    private UserInterface $user;
+    public function __construct(string $text, Checklist $checklist, UserInterface $user)
     {
         $this->text = $text;
         $this->checklist = $checklist;
@@ -73,12 +74,12 @@ class ToDo
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(UserInterface $user): self
     {
         $this->user = $user;
 
