@@ -6,15 +6,13 @@ namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
+use App\Service\ToDoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/todos", name="todo_")
@@ -58,7 +56,7 @@ class ToDoController extends AbstractController
     /**
      * @Route("/create", name="create", methods={"GET", "POST"})
      */
-    public function createAction(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
+    public function createAction(Request $request, EntityManagerInterface $em, ToDoService $toDoService): Response
     {
         if ($request->getMethod() === 'GET') {
             $checklists = $em->getRepository(Checklist::class)->findBy(['user' => $this->getUser()]);
@@ -66,23 +64,11 @@ class ToDoController extends AbstractController
                 'checklists' => $checklists
             ]);
         }
-        $text = (string) $request->request->get('text');
-        $checklistId = (int) $request->request->get('checklist_id');
-        $checklist = $em->getRepository(Checklist::class)->findOneBy(['id' => $checklistId, 'user' => $this->getUser()]);
-        if (!$checklist) {
-            throw new NotFoundHttpException('Checklist not found');
-        }
-        $todo = new ToDo($text, $checklist, $this->getUser());
-        /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($todo);
-        foreach ($errors as $error) {
-            $this->addFlash(FlashMessagesEnum::FAIL, $error->getMessage());
-        }
-        if (!$errors->count()) {
-            $em->persist($todo);
-            $em->flush();
-            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $todo->getText()));
-        }
+        $toDoService->createAndFlush(
+            (string) $request->request->get('text'),
+            (int) $request->request->get('checklist_id'),
+            $this->getUser()
+                );
         return $this->redirectToRoute('todo_create');
     }
     /**
