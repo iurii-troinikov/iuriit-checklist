@@ -21,17 +21,14 @@ class UserController extends AbstractController
 {
     /**
      * @Route("list", name="list", methods={"GET"})
-     *
      * @IsGranted("ROLE_ADMIN")
      */
     public function list(Request $request, UserService $userService): Response {
         $users = $userService->getUserList();
-
         return $this->render('user/list.html.twig', [
-            'users' => $users
-        ]);
+        'users' => $users
+            ]);
     }
-
     /**
      * @Route("/registration", name="registration", methods={"POST", "GET"})
      *
@@ -45,7 +42,6 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('page_home');
     }
-
     /**
      * @Route("/login", name="login")
      *
@@ -61,7 +57,6 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('page_home');
     }
-
     /**
      * @Route("/logout", name="logout", methods={"GET"})
      *
@@ -72,3 +67,4 @@ class UserController extends AbstractController
         throw new Exception('Unreachable statement');
     }
 }
+
