@@ -6,7 +6,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Checklist;
 use App\Entity\ToDo;
-use App\Entity\User;
+use App\Service\UserService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -17,11 +17,19 @@ class TodoFixtures extends Fixture
         'My favorite books review',
         'My friends hobbies',
     ];
+
+    private UserService $userService;
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $users = [];
         for ($i = 0; $i < 3; $i++) {
-            $user = new User("user $i");
+
+            $user = $this->userService->create("User$i", "user $i");
             $manager->persist($user);
             $users[] = $user;
         }
