@@ -24,7 +24,7 @@ class UserController extends AbstractController
      * @IsGranted("IS_ANONYMOUS_USER")
      */
     public function registration(Request $request, UserService $userService): Response {
-        $userService->createAndFlush(
+        $userService->createAndFlushOnHttpRequest(
             (string)  $request->request->get('password'),
             (string)   $request->request->get('username')
         );
