@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Enum\RolesEnum;
 use App\Service\UserService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,10 +16,12 @@ class CreateAdminCommand extends Command
     protected static $defaultName = 'app:create-admin';
     protected static $defaultDescription = 'Create application admin user';
     private UserService $userService;
-    public function __construct(UserService $userService, string $name = null)
+    private EntityManagerInterface $em;
+    public function __construct(UserService $userService, EntityManagerInterface $em, string $name = null)
     {
         parent::__construct($name);
         $this->userService = $userService;
+        $this->em = $em;
     }
     protected function configure(): void
     {
@@ -33,7 +36,11 @@ class CreateAdminCommand extends Command
         $userName = $input->getOption('username');
         $password = $input->getOption('password');
         try {
-            $this->userService->createAndFlush($password, $userName);
+            $user = $this->userService->create($password, $userName);
+            $user->addRole(RolesEnum::ADMIN);
+            $this->em->persist($user);
+            $this->em->flush();
+
             $io->success('Admin user successfully created');
         } catch (\Exception $e) {
             $io->error($e->getMessage());

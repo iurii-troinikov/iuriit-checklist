@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
+use App\Enum\RolesEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

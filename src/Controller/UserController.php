@@ -20,18 +20,35 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/registration", name="registration", methods={"POST"})
+     * @Route("list", name="list", methods={"GET"})
+     *
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function list(Request $request, UserService $userService): Response {
+        $users = $userService->getUserList();
+
+        return $this->render('user/list.html.twig', [
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * @Route("/registration", name="registration", methods={"POST", "GET"})
+     *
      * @IsGranted("IS_ANONYMOUS_USER")
      */
     public function registration(Request $request, UserService $userService): Response {
-        $userService->createAndFlushOnHttpRequest(
-            (string)  $request->request->get('password'),
-            (string)   $request->request->get('username')
+        $userService->createAndFlush(
+            (string) $request->request->get('password'),
+            (string) $request->request->get('username')
         );
+
         return $this->redirectToRoute('page_home');
     }
+
     /**
      * @Route("/login", name="login")
+     *
      * @IsGranted("IS_ANONYMOUS_USER")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -41,10 +58,13 @@ class UserController extends AbstractController
             ? $error->getMessage()
             : 'You should be authenticated'
         );
+
         return $this->redirectToRoute('page_home');
     }
+
     /**
      * @Route("/logout", name="logout", methods={"GET"})
+     *
      * @IsGranted("ROLE_USER")
      */
     public function logout(): void

@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Checklist;
 use App\Enum\FlashMessagesEnum;
+use App\Enum\RolesEnum;
 use App\Service\ChecklistService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

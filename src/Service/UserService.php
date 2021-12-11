@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -26,40 +27,39 @@ class UserService
         SessionInterface $session,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->validator = $validator;
         $this->session = $session;
         $this->passwordHasher = $passwordHasher;
         $this->em = $em;
     }
-    public function createAndFlushOnHttpRequest(string $plainPassword, string $username): void
-{
-    try {
-        $this->createAndFlush($plainPassword, $username);
-        $this->session->getFlashBag()->add(FlashMessagesEnum::SUCCESS, "You have been registered");
-    } catch (UserValidationException $exception) {
-        $this->session->getFlashBag()->add(FlashMessagesEnum::FAIL, $exception->getMessage());
-    }
-}
+
     public function createAndFlush(string $plainPassword, string $username): void
     {
-            $this->validateUserPassword($plainPassword);
+        try {
             $user = $this->create($plainPassword, $username);
-            $this->validateUser($user);
             $this->em->persist($user);
             $this->em->flush();
+            $this->session->getFlashBag()->add(FlashMessagesEnum::SUCCESS, "You have been registered!");
+        } catch (UserValidationException $exception) {
+            $this->session->getFlashBag()->add(FlashMessagesEnum::FAIL, $exception->getMessage());
+        }
     }
+
     public function create(string $plainPassword, string $username): User
     {
+        $this->validateUserPassword($plainPassword);
         $user = new User($username);
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
             $plainPassword
         );
         $user->setPassword($hashedPassword);
+        $this->validateUser($user);
+
         return $user;
     }
+
     private function validateUserPassword(string $plainPassword)
     {
         /** @var ConstraintViolationList $passwordErrors */
@@ -78,6 +78,7 @@ class UserService
             }
         }
     }
+
     private function validateUser(User $user)
     {
         $userErrors = $this->validator->validate($user);
@@ -85,5 +86,12 @@ class UserService
             throw new UserValidationException($error->getMessage());
         }
     }
-}
 
+    /**
+     * @return User[]
+     */
+    public function getUserList(): array
+    {
+        return $this->em->getRepository(User::class)->findAll();
+    }
+}
