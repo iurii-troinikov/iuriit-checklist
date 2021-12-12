@@ -15,5 +15,5 @@ Create auth.json in the project if needed.
 Go into the container with Apache and run composer install
 Roll back any changed files like .gitignore or pub/.htaccess
 If it is a project with a database - create a database, user, give permissions, unwrap the database from the dump command MySQL
-USE "<db_name>;"
-SOURCE "<path_to_sql_file>"
+USE <db_name>;
+SOURCE <path_to_sql_file>
