@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List All Todos {% endblock %}
+
+{% block body %}
+    {% for user in users %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text">{{ user.username }}</p>
+                <p class="card-text">Has roles: {{ user.roles | join(',') }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
