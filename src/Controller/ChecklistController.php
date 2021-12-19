@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Checklist;
 use App\Enum\FlashMessagesEnum;
-use App\Enum\RolesEnum;
 use App\Service\ChecklistService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,7 +24,10 @@ class ChecklistController extends AbstractController
      */
     public function create(Request $request, ChecklistService $checklistService): Response
     {
-        $checklistService->createAndFlush((string)$request->request->get('name'), $this->getUser());
+        $checklistName = (string)$request->request->get('name');
+        $checklistService->createAndFlush($checklistName, $this->getUser());
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $checklistName));
+
         return $this->redirectToRoute('page_home');
     }
     /**
@@ -40,4 +42,3 @@ class ChecklistController extends AbstractController
         return $this->redirectToRoute('page_home');
     }
 }
-
