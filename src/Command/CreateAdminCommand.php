@@ -26,20 +26,19 @@ class CreateAdminCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = $this->getHelper('question');
-        $question1 = new Question('Please enter admin user name:');
-        $question2 = new Question('Please enter admin password:');
+        $question1 = new Question('Please enter admin user name: ');
+        $question2 = new Question('Please enter admin password: ');
         $userName = $helper->ask($input, $output, $question1);
         $password = $helper->ask($input, $output, $question2);
+
         $io = new SymfonyStyle($input, $output);
-        try {
-            $user = $this->userService->create($password, $userName);
-            $user->addRole(RolesEnum::ADMIN);
-            $this->em->persist($user);
-            $this->em->flush();
-            $io->success('Admin user successfully created');
-        } catch (\Exception $e) {
-            $io->error($e->getMessage());
-        }
+
+        $user = $this->userService->create($password, $userName);
+        $user->addRole(RolesEnum::ADMIN);
+        $this->em->persist($user);
+        $this->em->flush();
+        $io->success('Admin user successfully created');
+
         return Command::SUCCESS;
     }
 }
