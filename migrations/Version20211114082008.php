@@ -7,15 +7,9 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-
 final class Version20211114082008 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return '';
-    }
-
-    public function up(Schema $schema): void
+ function up(Schema $schema): void
     {
 
         $this->addSql('ALTER TABLE to_do ADD checklist_id INT NOT NULL');

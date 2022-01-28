@@ -7,19 +7,16 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-
 final class Version20211106122312 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create Note entity';
+        return 'Create Todo entity';
     }
-
     public function up(Schema $schema): void
     {
-
         $this->addSql('
-           CREATE TABLE note (
+           CREATE TABLE to_do (
                id INT AUTO_INCREMENT NOT NULL, 
                title VARCHAR(100) NOT NULL, 
                text LONGTEXT NOT NULL, 
@@ -28,10 +25,8 @@ final class Version20211106122312 extends AbstractMigration
                    DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
                ');
     }
-
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE note');
+        $this->addSql('DROP TABLE to_do');
     }
 }
