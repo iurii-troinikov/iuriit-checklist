@@ -26,7 +26,7 @@ class ToDoController extends AbstractController
     public function listAll(EntityManagerInterface $em): Response
     {
         return $this->render('checklist/list.html.twig', [
-            'todos' => $em->getRepository(ToDo::class)->findBy(['user' => $this->getUser()])
+            'todos' => $em->getRepository(ToDo::class)->findByUser($this->getUser())
         ]);
     }
     /**
@@ -35,10 +35,7 @@ class ToDoController extends AbstractController
      */
     public function listByChecklist(Checklist $checklist, EntityManagerInterface $em): Response
     {
-        $todos = $em->getRepository(ToDo::class)->findBy([
-            'checklist' => $checklist,
-            'user' => $this->getUser()
-        ]);
+        $todos = $em->getRepository(ToDo::class)->findByChecklistAndUser($checklist, $this->getUser());
         return $this->render('checklist/list.html.twig', [
             'todos' => $todos
         ]);

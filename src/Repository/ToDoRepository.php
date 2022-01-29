@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Checklist;
 use App\Entity\ToDo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method ToDo|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,5 +23,26 @@ class ToDoRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ToDo::class);
     }
+    private function selectByUser(UserInterface $user): QueryBuilder
+    {
+        return $this->createQueryBuilder('to_do')
+            ->select('to_do')
+            ->join('to_do.users', 'user')
+            ->where('user = :user')
+            ->setParameter(':user', $user);
+    }
+    public function findByUser(UserInterface $user): array
+    {
+        return $this->selectByUser($user)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findByChecklistAndUser(Checklist $checklist, UserInterface $user): array
+    {
+        return $this->selectByUser($user)
+            ->andWhere('to_do.checklist = :checklist')
+            ->setParameter(':checklist', $checklist)
+            ->getQuery()
+            ->getResult();
+    }
 }
-

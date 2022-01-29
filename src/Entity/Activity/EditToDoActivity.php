@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 class EditToDoActivity extends Activity
 {
     /**
-     * @ORM\ManyToOne(targetEntity=App\Entity\ToDo::class)
+     * @ORM\ManyToOne(targetEntity=ToDo::class)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private ToDo $toDo;
     public function __construct(User $user, ToDo $toDo) {
