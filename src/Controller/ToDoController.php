@@ -83,4 +83,28 @@ class ToDoController extends AbstractController
         $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todo->getText()));
         return $this->redirectToRoute('todo_list_all');
     }
+
+    /**
+     * @Route("/edit{id}", name="edit", methods={"GET", "POST"})
+     */
+    public function editAction(Request $request, ToDo $toDo, EntityManagerInterface $em, ToDoService $toDoService): Response
+    {
+        if ($request->getMethod() === 'GET') {
+            $checklists = $em->getRepository(Checklist::class)->findBy(['user' => $this->getUser()]);
+            return $this->render('checklist/edit.html.twig', [
+                'todo' => $toDo,
+                'checklists' => $checklists
+            ]);
+        }
+        $title = (string) $request->request->get('title');
+        $toDoService->editAndFlush(
+            $toDo,
+            $title,
+            (string) $request->request->get('text'),
+            (int) $request->request->get('checklist_id')
+        );
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was edited', $title));
+
+        return $this->redirectToRoute('todo_get', ['id' => $toDo->getId()]);
+    }
 }

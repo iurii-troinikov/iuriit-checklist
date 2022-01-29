@@ -39,4 +39,22 @@ class ToDoService
         $this->em->persist($todo);
         $this->em->flush();
     }
+    public function editAndFlush(ToDo $toDo, string $title, string $text, int $categoryId): void
+    {
+        $checklist = $this->em->getRepository(Checklist::class)->findOneBy(['id' => $categoryId, 'user' => $toDo->getUser()]);
+        if (!$checklist) {
+            throw new NotFoundHttpException('Checklist not found');
+        }
+
+        $toDo->setText($text)
+            ->setChecklist($checklist);
+
+        /** @var ConstraintViolationList $errors */
+        $errors = $this->validator->validate($toDo);
+        foreach ($errors as $error) {
+            throw new HttpException(400, $error->getMessage());
+        }
+        $this->em->persist($toDo);
+        $this->em->flush();
+    }
 }
