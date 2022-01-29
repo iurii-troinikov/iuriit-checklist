@@ -18,4 +18,11 @@ class ActivityRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, VisitActivity::class);
     }
+    public function getVisitActivityData(): array
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $stmt = $connection->prepare('SELECT * FROM `activity`');
+
+        return $stmt->executeQuery()->fetchAllAssociative();
+    }
 }
