@@ -47,7 +47,7 @@ class ActivityRepository extends ServiceEntityRepository
             AND activity.user_id = :user
         ');
         $result = $stmt->executeQuery([
-            'type' => 'edit_checklist',
+            'type' => 'edit_todo',
             'user' => $user->getId()
         ]);
 

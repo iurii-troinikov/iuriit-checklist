@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=ActivityRepository::class)
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"visit" = "VisitActivity", "edit_checklist" = "EditToDoActivity"})
+ * @ORM\DiscriminatorMap({"visit" = "VisitActivity", "edit_todo" = "EditToDoActivity"})
  */
 abstract class Activity
 {
