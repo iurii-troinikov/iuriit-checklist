@@ -93,14 +93,14 @@ class ToDoController extends AbstractController
                 'checklists' => $checklists
             ]);
         }
-        $title = (string) $request->request->get('title');
+        $text = (string) $request->request->get('text');
         $toDoService->editAndFlush(
             $toDo,
-            $title,
+            $text,
             (string) $request->request->get('text'),
             (int) $request->request->get('checklist_id')
         );
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was edited', $title));
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was edited', $text));
 
         return $this->redirectToRoute('todo_get', ['id' => $toDo->getId()]);
     }
