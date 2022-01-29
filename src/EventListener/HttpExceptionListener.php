@@ -13,6 +13,9 @@ class HttpExceptionListener
     public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
+        if (!$exception instanceof HttpExceptionInterface) {
+            return;
+        }
         $request = $event->getRequest();
         $session = $request->getSession();
         if (!$refererUrl = $request->headers->get('referer')) {
@@ -20,16 +23,10 @@ class HttpExceptionListener
         }
 
         $response = new RedirectResponse($refererUrl);
+        $response->setStatusCode($exception->getStatusCode());
+        $response->headers->replace($exception->getHeaders());
 
-        if ($exception instanceof HttpExceptionInterface) {
-            $failureMessage = $exception->getMessage();
-            $response->setStatusCode($exception->getStatusCode());
-            $response->headers->replace($exception->getHeaders());
-        } else {
-            $failureMessage = 'Internal server error. Please contact website admin.';
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-        $session->getFlashBag()->add(FlashMessagesEnum::FAIL, $failureMessage);
+        $session->getFlashBag()->add(FlashMessagesEnum::FAIL, $exception->getMessage());
         $event->setResponse($response);
     }
 }
