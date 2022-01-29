@@ -39,9 +39,9 @@ class ToDoService
         $this->em->persist($todo);
         $this->em->flush();
     }
-    public function editAndFlush(ToDo $toDo, string $title, string $text, int $categoryId): void
+    public function editAndFlush(ToDo $toDo, string $title, string $text, int $checklistId): void
     {
-        $checklist = $this->em->getRepository(Checklist::class)->findOneBy(['id' => $categoryId, 'user' => $toDo->getUser()]);
+        $checklist = $this->em->getRepository(Checklist::class)->findOneBy(['id' => $checklistId, 'user' => $toDo->getUser()]);
         if (!$checklist) {
             throw new NotFoundHttpException('Checklist not found');
         }

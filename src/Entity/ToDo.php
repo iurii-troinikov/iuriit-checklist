@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Model\Ownable;
 use App\Repository\ToDoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,16 +40,22 @@ class ToDo implements Ownable
      */
     private Checklist $checklist;
     /**
+     * @ORM\ManyToMany(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Collection $users;
+    /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private UserInterface $user;
-    public function __construct(string $text, Checklist $checklist, UserInterface $user)
+    private UserInterface $owner;
+    public function __construct(string $text, Checklist $checklist, UserInterface $owner)
     {
         $this->text = $text;
         $this->checklist = $checklist;
-        $this->user = $user;
-
+        $this->owner = $owner;
+        $this->users = new ArrayCollection();
+        $this->users->add($owner);
     }
     public function getId(): int
     {
@@ -60,7 +68,6 @@ class ToDo implements Ownable
     public function setText(string $text): self
     {
         $this->text = $text;
-
         return $this;
     }
     public function getChecklist(): Checklist
@@ -72,13 +79,26 @@ class ToDo implements Ownable
         $this->checklist = $checklist;
         return $this;
     }
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+    public function setUsers(Collection $users): self
+    {
+        $this->users = $users;
+        return $this;
+    }
+    public function getOwner(): UserInterface
+    {
+        return $this->owner;
+    }
+    public function setOwner(UserInterface $owner): ToDo
+    {
+        $this->owner = $owner;
+        return $this;
+    }
     public function getUser(): UserInterface
     {
-        return $this->user;
-    }
-    public function setUser(UserInterface $user): self
-    {
-        $this->user = $user;
-        return $this;
+        return $this->getOwner();
     }
 }
