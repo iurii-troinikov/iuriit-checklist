@@ -81,7 +81,7 @@ class ToDoController extends AbstractController
                 'user' => $this->getUser(),
             ]
         );
-        $todo = new Todo('', '', $checklists[0], $this->getUser());
+        $todo = new Todo('', $checklists[0], $this->getUser());
         $form = $this->createForm(TodoType::class, $todo);
 
         $form->handleRequest($request);
@@ -110,7 +110,7 @@ class ToDoController extends AbstractController
     }
 
     /**
-     * @Route("/edit{id}", name="edit", methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, ToDo $toDo, EntityManagerInterface $em, ToDoService $toDoService): Response
     {

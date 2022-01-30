@@ -23,7 +23,6 @@ class TodoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
             ->add('text')
             ->add('checklist', null, [
                 'choice_label' => 'title',
