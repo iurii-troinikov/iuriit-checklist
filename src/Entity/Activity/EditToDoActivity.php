@@ -18,9 +18,15 @@ class EditToDoActivity extends Activity
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private ToDo $toDo;
-    public function __construct(User $user, ToDo $toDo) {
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $changes = [];
+    public function __construct(User $user, ToDo $toDo, array $changes) {
         parent::__construct($user);
         $this->toDo = $toDo;
+        $this->changes = $changes;
     }
     public function getToDo(): ToDo
     {
@@ -29,6 +35,18 @@ class EditToDoActivity extends Activity
     public function setToDo(ToDo $toDo): self
     {
         $this->toDo = $toDo;
+
+        return $this;
+    }
+
+    public function getChanges(): ?array
+    {
+        return $this->changes;
+    }
+
+    public function setChanges(?array $changes): self
+    {
+        $this->changes = $changes;
 
         return $this;
     }

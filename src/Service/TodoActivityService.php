@@ -20,7 +20,7 @@ class TodoActivityService
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function createTodoEditActivity(ToDo $todo)
+    public function createTodoEditActivity(ToDo $todo, array $changes)
     {
         $user = $this->tokenStorage->getToken() ? $this->tokenStorage->getToken()->getUser() : null;
 
@@ -28,7 +28,7 @@ class TodoActivityService
             throw new HttpException(400, 'User not exists in request');
         }
 
-        $activity = new EditTodoActivity($user, $todo);
+        $activity = new EditTodoActivity($user, $todo, $changes);
 
         $this->em->persist($activity);
         $this->em->flush();
