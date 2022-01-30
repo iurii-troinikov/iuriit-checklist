@@ -55,41 +55,18 @@ class ToDoController extends AbstractController
     /**
      * @Route("/create", name="create", methods={"GET", "POST"})
      */
-    public function createAction(Request $request, EntityManagerInterface $em, ToDoService $toDoService): Response
+    public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        if ($request->getMethod() === 'GET') {
-            $checklists = $em->getRepository(Checklist::class)->findBy(['user' => $this->getUser()]);
-            return $this->render('checklist/create.html.twig', [
-                'checklists' => $checklists
-            ]);
-        }
-        $text = (string) $request->request->get('text');
-        $toDoService->createAndFlush(
-            (string) $request->request->get('text'),
-            (int) $request->request->get('checklist_id'),
-                );
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $text));
-        return $this->redirectToRoute('todo_create');
-    }
-    /**
-     * @Route("/new", name="new", methods={"GET", "POST"})
-     */
-    public function newAction(Request $request, EntityManagerInterface $em): Response
-    {
-
         $form = $this->createForm(TodoType::class);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $todo = $form->getData();
             $em->persist($todo);
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was successfully created', $todo->getText()));
-
             return $this->redirectToRoute('todo_list_all');
         }
-
-        return $this->renderForm('checklist/new.html.twig', [
+            return $this->renderForm('checklist/create.html.twig', [
             'form' => $form,
         ]);
     }
@@ -108,24 +85,19 @@ class ToDoController extends AbstractController
     /**
      * @Route("/edit/{id}", name="edit", methods={"GET", "POST"})
      */
-    public function editAction(Request $request, ToDo $toDo, EntityManagerInterface $em, ToDoService $toDoService): Response
+    public function editAction(Request $request, ToDo $todo, EntityManagerInterface $em): Response
     {
-        if ($request->getMethod() === 'GET') {
-            $checklists = $em->getRepository(Checklist::class)->findBy(['user' => $this->getUser()]);
-            return $this->render('checklist/edit.html.twig', [
-                'todo' => $toDo,
-                'checklists' => $checklists
-            ]);
+        $form = $this->createForm(TodoType::class, $todo);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($todo);
+            $em->flush();
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Note "%s" was successfully changed', $todo->getText()));
+            return $this->redirectToRoute('todo_get', ['id' => $todo->getId()]);
         }
-        $text = (string) $request->request->get('text');
-        $toDoService->editAndFlush(
-            $toDo,
-            $text,
-            (string) $request->request->get('text'),
-            (int) $request->request->get('checklist_id')
-        );
-        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was edited', $text));
-
-        return $this->redirectToRoute('todo_get', ['id' => $toDo->getId()]);
+            return $this->renderForm('checklist/edit.html.twig', [
+            'form' => $form,
+            'note' => $todo,
+        ]);
     }
 }

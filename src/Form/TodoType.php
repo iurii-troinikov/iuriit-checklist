@@ -35,9 +35,7 @@ class TodoType extends AbstractType
             ->add('users', null, [
                 'choice_label' => 'username',
                 'label' => 'Shared to users',
-            ])
-            ->add('save', SubmitType::class)
-        ;
+            ]);
     }
     public function configureOptions(OptionsResolver $resolver): void
     {
