@@ -20,6 +20,27 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+            - '../src/Model/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\EventListener\HttpExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\EventListener\ConsoleExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: console.error, method: onConsoleException }
+
+    App\EventListener\ControllerRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onControllerRequest }
+
+    App\EventListener\EditTodoActivityListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: postUpdate, entity: App\Entity\ToDo, lazy: true }
+
+    App\EventListener\OwnableEntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist, lazy: true }
