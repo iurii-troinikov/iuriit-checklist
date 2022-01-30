@@ -63,12 +63,12 @@ class ToDoController extends AbstractController
                 'checklists' => $checklists
             ]);
         }
+        $text = (string) $request->request->get('text');
         $toDoService->createAndFlush(
             (string) $request->request->get('text'),
             (int) $request->request->get('checklist_id'),
-            $this->getUser()
                 );
-
+        $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was created', $text));
         return $this->redirectToRoute('todo_create');
     }
     /**
@@ -76,16 +76,12 @@ class ToDoController extends AbstractController
      */
     public function newAction(Request $request, EntityManagerInterface $em): Response
     {
-        $checklists = $em->getRepository(Checklist::class)->findBy(
-            [
-                'user' => $this->getUser(),
-            ]
-        );
-        $todo = new Todo('', $checklists[0], $this->getUser());
-        $form = $this->createForm(TodoType::class, $todo);
+
+        $form = $this->createForm(TodoType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $todo = $form->getData();
             $em->persist($todo);
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was successfully created', $todo->getText()));

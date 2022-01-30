@@ -35,7 +35,8 @@ class TodoFixtures extends Fixture
         }
         $checklists = [];
         for ($i = 0; $i < 3; $i++) {
-            $checklist = new Checklist($this->checklistTitles[$i], $users[$i]);
+            $checklist = new Checklist($this->checklistTitles[$i]);
+            $checklist->setUser($users[$i]);
             $manager->persist($checklist);
             $checklists[] = $checklist;
         }
@@ -43,12 +44,11 @@ class TodoFixtures extends Fixture
             $checklist = $checklists[random_int(0, 2)];
             $todo = new ToDo(
                 'Loren ipsum' . $i,
-                $checklist,
-                $checklist->getUser()
+                $checklist
             );
+            $todo->setUser($checklist->getUser());
             $manager->persist($todo);
         }
         $manager->flush();
     }
 }
-

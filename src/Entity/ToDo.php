@@ -49,13 +49,11 @@ class ToDo implements Ownable
      * @ORM\JoinColumn(nullable=false)
      */
     private UserInterface $owner;
-    public function __construct(string $text, Checklist $checklist, UserInterface $owner)
+    public function __construct(string $text, Checklist $checklist)
     {
         $this->text = $text;
         $this->checklist = $checklist;
-        $this->owner = $owner;
         $this->users = new ArrayCollection();
-        $this->users->add($owner);
     }
     public function getId(): int
     {
@@ -100,5 +98,10 @@ class ToDo implements Ownable
     public function getUser(): UserInterface
     {
         return $this->getOwner();
+    }
+    public function setUser(UserInterface $user)
+    {
+        $this->owner = $user;
+        $this->users->add($user);
     }
 }

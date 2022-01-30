@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -25,7 +26,7 @@ class ChecklistController extends AbstractController
     public function create(Request $request, ChecklistService $checklistService): Response
     {
         $checklistName = (string)$request->request->get('name');
-        $checklistService->createAndFlush($checklistName, $this->getUser());
+        $checklistService->createAndFlush($checklistName);
         $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was created', $checklistName));
 
         return $this->redirectToRoute('page_home');

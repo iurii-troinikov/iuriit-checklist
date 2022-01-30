@@ -43,10 +43,9 @@ class Checklist implements Ownable
      * @ORM\JoinColumn(nullable=false)
      */
     private UserInterface $user;
-    public function __construct(string $title, UserInterface $user)
+    public function __construct(string $title)
     {
         $this->title = $title;
-        $this->user = $user;
         $this->toDos = new ArrayCollection();
     }
     public function getId(): ?int

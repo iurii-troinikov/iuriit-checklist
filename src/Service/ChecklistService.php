@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -6,7 +7,6 @@ namespace App\Service;
 use App\Entity\Checklist;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -22,9 +22,9 @@ class ChecklistService
         $this->validator = $validator;
         $this->em = $em;
     }
-    public function createAndFlush(string $name, UserInterface $user): void
+    public function createAndFlush(string $name): void
 {
-    $checklist = new Checklist($name, $user);
+    $checklist = new Checklist($name);
     /** @var ConstraintViolationList $errors */
     $errors = $this->validator->validate($checklist);
     foreach ($errors as $error) {
