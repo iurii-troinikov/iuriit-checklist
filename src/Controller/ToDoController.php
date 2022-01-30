@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -6,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
+use App\Form\TodoType;
 use App\Service\ToDoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -68,6 +70,32 @@ class ToDoController extends AbstractController
                 );
 
         return $this->redirectToRoute('todo_create');
+    }
+    /**
+     * @Route("/new", name="new", methods={"GET", "POST"})
+     */
+    public function newAction(Request $request, EntityManagerInterface $em): Response
+    {
+        $checklists = $em->getRepository(Checklist::class)->findBy(
+            [
+                'user' => $this->getUser(),
+            ]
+        );
+        $todo = new Todo('', '', $checklists[0], $this->getUser());
+        $form = $this->createForm(TodoType::class, $todo);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($todo);
+            $em->flush();
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was successfully created', $todo->getText()));
+
+            return $this->redirectToRoute('todo_list_all');
+        }
+
+        return $this->renderForm('checklist/new.html.twig', [
+            'form' => $form,
+        ]);
     }
     /**
      * @Route("/delete/{id}", name="delete")
