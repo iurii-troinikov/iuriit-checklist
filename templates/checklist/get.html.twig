@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List All Todoes{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">{{ todo.text }}</p>
+        </div>
+        <div class="card.body">
+            <a class="btn btn-danger float-end" href="{{ path('todo_delete', {'id': todo.id}) }}" role="button">
+                Delete
+            </a>
+            <a class="btn btn-primary float-end" href="{{ path('todo_edit', {'id': todo.id}) }}" role="button">
+                Edit
+            </a>
+        </div>
+    </div>
+{% endblock %}
