@@ -29,6 +29,7 @@ class ToDoRepository extends ServiceEntityRepository
             ->select('to_do')
             ->join('to_do.users', 'user')
             ->where('user = :user')
+            ->orderBy('to_do.id', 'DESC')
             ->setParameter(':user', $user);
     }
     public function findByUser(UserInterface $user): array
