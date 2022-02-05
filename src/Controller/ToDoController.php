@@ -44,7 +44,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/{id}", name="get", requirements={"id"="\d+"})
-     * @IsGranted("IS_OWNER", subject="todo")
+     * @IsGranted("IS_SHARED", subject="todo")
      */
     public function getAction(ToDo $todo): Response
     {
@@ -72,11 +72,15 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/delete/{id}", name="delete")
-     * @IsGranted("IS_OWNER", subject="todo")
+     * @IsGranted("IS_SHARED", subject="todo")
      */
     public function deleteAction(ToDo $todo, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->remove($todo);
+        if ($this->getUser() === $todo->getUser()) {
+            $entityManager->remove($todo);
+        } else {
+            $todo->getUsers()->removeElement($this->getUser());
+        }
         $entityManager->flush();
         $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was deleted', $todo->getText()));
         return $this->redirectToRoute('todo_list_all');
@@ -92,12 +96,12 @@ class ToDoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($todo);
             $em->flush();
-            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Note "%s" was successfully changed', $todo->getText()));
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was successfully changed', $todo->getText()));
             return $this->redirectToRoute('todo_get', ['id' => $todo->getId()]);
         }
             return $this->renderForm('checklist/edit.html.twig', [
             'form' => $form,
-            'note' => $todo,
+            'todo' => $todo,
         ]);
     }
 }
