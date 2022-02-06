@@ -19,10 +19,10 @@
             <tr>
                 <td>{{ activity.createdAt|date("Y-m-d H:i:s", "Europe/Kiev") }}</td>
                 <td>{{ activity.user ? activity.user.username : '-' }}</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <td class="brake-word">{{ activity.url }}</td>
+                <td>{{ activity.method }}</td>
+                <td>{{ activity.ip }}</td>
+                <td>{{ activity.statusCode }}</td>
             </tr>
         {% endfor %}
         </tbody>
