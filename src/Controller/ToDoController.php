@@ -9,6 +9,7 @@ use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
 use App\Form\TodoType;
 use App\Service\ToDoService;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,24 +23,41 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ToDoController extends AbstractController
 {
+    private PaginationService $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
     /**
      * @Route(name="list_all")
      */
-    public function listAll(EntityManagerInterface $em): Response
+    public function listAll(EntityManagerInterface $em, Request $request): Response
     {
+        $data = $this->paginationService->paginator(
+            $em->getRepository(ToDo::class)->selectByUser($this->getUser()),
+            $request
+        );
         return $this->render('checklist/list.html.twig', [
-            'todos' => $em->getRepository(ToDo::class)->findByUser($this->getUser())
+            'todos' => $data,
+            'lastPage' => $this->paginationService->lastPage($data),
         ]);
     }
     /**
      * @Route("/checklist/{id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
      * @IsGranted("IS_OWNER", subject="checklist")
      */
-    public function listByChecklist(Checklist $checklist, EntityManagerInterface $em): Response
+    public function listByChecklist(Checklist $checklist, EntityManagerInterface $em, Request $request): Response
     {
-        $todos = $em->getRepository(ToDo::class)->findByChecklistAndUser($checklist, $this->getUser());
+        $data = $this->paginationService->paginator(
+            $em->getRepository(ToDo::class)->selectByCategoryAndUser($checklist, $this->getUser()),
+            $request,
+            2
+        );
         return $this->render('checklist/list.html.twig', [
-            'todos' => $todos
+            'todos' => $data,
+            'lastPage' => $this->paginationService->lastPage($data),
         ]);
     }
     /**

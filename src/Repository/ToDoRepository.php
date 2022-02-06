@@ -23,7 +23,7 @@ class ToDoRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ToDo::class);
     }
-    private function selectByUser(UserInterface $user): QueryBuilder
+    public function selectByUser(UserInterface $user): QueryBuilder
     {
         return $this->createQueryBuilder('to_do')
             ->select('to_do')
@@ -38,12 +38,10 @@ class ToDoRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findByChecklistAndUser(Checklist $checklist, UserInterface $user): array
+    public function selectByChecklistAndUser(Checklist $checklist, UserInterface $user): QueryBuilder
     {
         return $this->selectByUser($user)
             ->andWhere('to_do.checklist = :checklist')
-            ->setParameter(':checklist', $checklist)
-            ->getQuery()
-            ->getResult();
+            ->setParameter(':checklist', $checklist);
     }
 }
