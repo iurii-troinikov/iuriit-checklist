@@ -49,7 +49,7 @@ class ActivityController extends AbstractController
     {
         return $this->render('activity/todo.html.twig', [
             'data' => $em->getRepository(Activity::class)->getTodoActivityData($this->getUser()),
-            'lastPage' => 100,
+            'lastPage' => 1,
         ]);
     }
 }
