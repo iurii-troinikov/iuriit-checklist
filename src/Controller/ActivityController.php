@@ -45,11 +45,16 @@ class ActivityController extends AbstractController
      * @Route("/todo", name="todo")
      * @IsGranted("ROLE_USER")
      */
-    public function todo(EntityManagerInterface $em): Response
+    public function todo(EntityManagerInterface $em, Request $request): Response
     {
+        $data = $this->paginationService->paginator(
+            $em->getRepository(Activity::class)->selectTodoActivityData($this->getUser()),
+            $request,
+            2
+        );
         return $this->render('activity/todo.html.twig', [
-            'data' => $em->getRepository(Activity::class)->getTodoActivityData($this->getUser()),
-            'lastPage' => 1,
+            'data' => $data,
+            'lastPage' => $this->paginationService->lastPage($data),
         ]);
     }
 }
