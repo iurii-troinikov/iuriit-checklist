@@ -51,7 +51,7 @@ class ToDoController extends AbstractController
     public function listByChecklist(Checklist $checklist, EntityManagerInterface $em, Request $request): Response
     {
         $data = $this->paginationService->paginator(
-            $em->getRepository(ToDo::class)->selectByCategoryAndUser($checklist, $this->getUser()),
+            $em->getRepository(ToDo::class)->selectByChecklistAndUser($checklist, $this->getUser()),
             $request,
             2
         );
