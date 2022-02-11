@@ -1,0 +1,26 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ActivityController!{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Created at</th>
+            <th scope="col">Todo name</th>
+            <th scope="col">Edited By</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in data %}
+            <tr>
+                <td>{{ item.createdAt|date("Y-m-d H:i:s", "Europe/Kiev") }}</td>
+                <td>{{ item.todo.text }}</td>
+                <td>{{ item.user.username }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ include('pagination.html.twig') }}
+{% endblock %}
