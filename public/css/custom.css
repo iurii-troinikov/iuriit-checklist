@@ -1,15 +1,36 @@
 .page-item.active .page-link {
-    z-index: 3;
     color: #fff;
     background-color: #198754;
     border-color: #198754;
 }
 .page-link {
-    position: relative;
-    display: block;
     color: #198754;
-    text-decoration: none;
     background-color: #fff;
     border: 1px solid #dee2e6;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.navbar-light .navbar-brand {
+    color: black;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: aliceblue;
+}
+
+.navbar-brand {
+    font-size: 1.50rem;
+}
+
+a {
+    color: #198754;
+}
+
+.form-control {
+    color: #212529;
+    background-color: #ced4da;
+    border: 1px solid #ced4da;
+}
+
+.card-header {
+    background-color: #ced4da;
 }
