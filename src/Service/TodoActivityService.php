@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Activity\EditToDoActivity;
+use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +21,7 @@ class TodoActivityService
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function createTodoEditActivity(ToDo $todo, array $changes)
+    public function createEditTodoActivity(ToDo $todo, array $changes)
     {
         $user = $this->tokenStorage->getToken() ? $this->tokenStorage->getToken()->getUser() : null;
 
@@ -28,9 +29,38 @@ class TodoActivityService
             throw new HttpException(400, 'User not exists in request');
         }
 
-        $activity = new EditTodoActivity($user, $todo, $changes);
+        $activity = new EditTodoActivity($user, $todo, $this->prepareChanges($changes));
 
         $this->em->persist($activity);
         $this->em->flush();
+    }
+
+    private function prepareChanges(array $changes): array
+    {
+        $result = [];
+        foreach ($changes as $key => $itemChanges) {
+            if ($key === 'checklist') {
+                $result[$key] = $this->prepareChecklist($itemChanges);
+                continue;
+            }
+
+            $result[$key] = $itemChanges;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Checklist[] $checklists
+     * @return array
+     */
+    private function prepareChecklist(array $checklists): array
+    {
+        $result = [];
+        foreach ($checklists as $checklist) {
+            $result[] = $checklist->getId();
+        }
+
+        return $result;
     }
 }

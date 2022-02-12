@@ -21,6 +21,6 @@ class EditTodoActivityListener
     {
         $uow =  $this->em->getUnitOfWork();
         $changes = $uow->getEntityChangeSet($todo);
-        $this->todoActivityService->createTodoEditActivity($todo, $changes);
+        $this->todoActivityService->createEditTodoActivity($todo, $changes);
     }
 }
