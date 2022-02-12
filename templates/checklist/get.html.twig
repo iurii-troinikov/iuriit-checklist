@@ -8,7 +8,11 @@
             <p class="card-text">{{ todo.text }}</p>
         </div>
         <div class="card-header d-flex justify-content-between">
+            <div>
+                {% if app.user.id == todo.user.id %}
             <p class="card-text fw-bold">Checklist: {{ todo.checklist.title }}</p>
+                {% endif %}
+            </div>
             <div>
                 <a class="btn btn-danger float-end" href="{{ path('todo_delete', {'id': todo.id}) }}" role="button">
                     Delete
