@@ -43,7 +43,7 @@ class ActivityController extends AbstractController
 
     /**
      * @Route("/todo", name="todo")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function todo(EntityManagerInterface $em, Request $request): Response
     {

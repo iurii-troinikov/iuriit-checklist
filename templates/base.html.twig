@@ -34,21 +34,21 @@
                     </li>
                     {% if app.user %}
                     <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ path('todo_create') }}">Add new ToDo</a>
-                    </li>
-                    <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ path('activity_visit') }}">Visit Activity</a>
-                    </li>
-                    <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ path('activity_todo') }}">Todo Edit Activity</a>
+                        <a class="nav-link" aria-current="page" href="{{ path('todo_create') }}">Add new ToDo</a>
                     </li>
                     {% if is_granted("ROLE_ADMIN") %}
                     <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ path('user_list') }}">User List</a>
+                        <a class="nav-link" aria-current="page" href="{{ path('user_list') }}">User List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('activity_visit') }}">Visit Activity</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ path('activity_todo') }}">Todo Edit Activity</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ path('user_logout') }}">Logout</a>
+                        <a class="nav-link" aria-current="page" href="{{ path('user_logout') }}">Logout</a>
                     </li>
                     {% endif %}
                 </ul>
