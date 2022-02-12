@@ -50,7 +50,7 @@ class ActivityController extends AbstractController
         $data = $this->paginationService->paginator(
             $em->getRepository(Activity::class)->selectTodoActivityData($this->getUser()),
             $request,
-            2
+            10
         );
         return $this->render('activity/todo.html.twig', [
             'data' => $data,

@@ -23,6 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ToDoController extends AbstractController
 {
+    const PAGE_LIMIT = 5;
+
     private PaginationService $paginationService;
 
     public function __construct(PaginationService $paginationService)
@@ -37,7 +39,8 @@ class ToDoController extends AbstractController
     {
         $data = $this->paginationService->paginator(
             $em->getRepository(ToDo::class)->selectByUser($this->getUser()),
-            $request
+            $request,
+            self::PAGE_LIMIT
         );
         return $this->render('checklist/list.html.twig', [
             'todos' => $data,
@@ -53,7 +56,7 @@ class ToDoController extends AbstractController
         $data = $this->paginationService->paginator(
             $em->getRepository(ToDo::class)->selectByChecklistAndUser($checklist, $this->getUser()),
             $request,
-            2
+            self::PAGE_LIMIT
         );
         return $this->render('checklist/list.html.twig', [
             'todos' => $data,

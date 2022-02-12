@@ -1,6 +1,7 @@
 {% set currentPage = max(app.request.query.get('page') ? : 1, 1) %}
 {% set currentRoute = app.request.attributes.get('_route') %}
-{% set requestParams = app.request.query.all %}
+{% set routeParams = app.request.attributes.get('_route_params')  %}
+{% set requestParams = app.request.query.all|merge(routeParams) %}
 {% set nearbyPageButtons = 2 %}
 {% if lastPage > 1 %}
 <div class="mb-12">
@@ -13,8 +14,8 @@
                 </a>
             </li>
             {% endif %}
-            <li class="page-item {{ currentPage == 1 ? 'active' : '' }}"><a class="page-link" href="{{ path(currentRoute, requestParams|merge({page: 1})) }}">{{ 1 }}</a></li>
-            {% if currentPage > nearbyPageButtons + 1 %}
+                <li class="page-item {{ currentPage == 1 ? 'active' : '' }}"><a class="page-link" href="{{ path(currentRoute, requestParams|merge({page: 1})) }}">{{ 1 }}</a></li>
+            {% if currentPage > nearbyPageButtons + 2 %}
                 <li class="page-item disabled"><a class="page-link">...</a></li>
             {% endif %}
             {% if lastPage > 2 %}
@@ -25,9 +26,9 @@
             {% endfor %}
             {% endif %}
             {% if currentPage + nearbyPageButtons + 1 < lastPage %}
-                <li class="page-item disabled"><a class="page-link">...</a></li>
+                    <li class="page-item disabled"><a class="page-link">...</a></li>
             {% endif %}
-            <li class="page-item {{ currentPage == lastPage ? 'active' : '' }}"><a class="page-link" href="{{ path(currentRoute, requestParams|merge({page: lastPage})) }}">{{ lastPage }}</a></li>
+                    <li class="page-item {{ currentPage == lastPage ? 'active' : '' }}"><a class="page-link" href="{{ path(currentRoute, requestParams|merge({page: lastPage})) }}">{{ lastPage }}</a></li>
             {% if currentPage != lastPage %}
             <li class="page-item">
                 <a class="page-link" href="{{ path(currentRoute, requestParams|merge({page: currentPage + 1})) }}" aria-label="Next">
