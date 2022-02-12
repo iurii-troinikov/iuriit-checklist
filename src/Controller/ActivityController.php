@@ -48,9 +48,8 @@ class ActivityController extends AbstractController
     public function todo(EntityManagerInterface $em, Request $request): Response
     {
         $data = $this->paginationService->paginator(
-            $em->getRepository(Activity::class)->selectTodoActivityData($this->getUser()),
-            $request,
-            10
+            $em->getRepository(Activity::class)->selectTodoActivityData(),
+            $request
         );
         return $this->render('activity/todo.html.twig', [
             'data' => $data,
