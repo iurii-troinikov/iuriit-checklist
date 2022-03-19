@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Checklist;
+use  App\Entity\Checklist;
 use App\Enum\FlashMessagesEnum;
+use App\Form\ChecklistType;
 use App\Service\ChecklistService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -41,5 +42,32 @@ class ChecklistController extends AbstractController
         $em->flush();
         $this->addFlash( FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was removed', $checklist->getTitle()));
         return $this->redirectToRoute('page_home');
+    }
+
+        // Добавление нового чеклиста через форму https://iiuriit-checklist.local/checklist
+
+    /**
+     * @Route(name="new", methods={"GET", "POST"})
+     */
+    public function newAction(Request $request, EntityManagerInterface $em): Response
+    {
+
+        $checklist = new Checklist('');
+
+        $form = $this->createForm(ChecklistType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $checklist = $form->getData();
+            $em->persist($checklist);
+            $em->flush();
+            $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Checklist "%s" was successfully created', $checklist->getTitle()));
+
+            return $this->redirectToRoute('page_home');
+        }
+
+        return $this->renderForm('checklist/new.html.twig',
+        [
+            'form' => $form,
+        ]);
     }
 }

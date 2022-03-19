@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SharedVoter extends Voter
 {
-    const IS_SHARED = 'IS_SHARED';
+    public const IS_SHARED = 'IS_SHARED';
     protected function supports(string $attribute, $subject): bool
     {
         if ($attribute !== self::IS_SHARED) {

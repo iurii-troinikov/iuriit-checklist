@@ -34,3 +34,9 @@ a {
 .card-header {
     background-color: #ced4da;
 }
+
+.btn-primary {
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+}

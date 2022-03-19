@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ToDoController extends AbstractController
 {
-    const PAGE_LIMIT = 5;
+    public const PAGE_LIMIT = 5;
 
     private PaginationService $paginationService;
 
@@ -49,7 +49,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/checklist/{id}", name="list_by_checklist", requirements={"checklistId"="\d+"})
-     * @IsGranted("IS_OWNER", subject="checklist")
+     * @IsGranted("IS_OWNER", subject="checklist", statusCode=404)
      */
     public function listByChecklist(Checklist $checklist, EntityManagerInterface $em, Request $request): Response
     {
@@ -65,7 +65,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/{id}", name="get", requirements={"id"="\d+"})
-     * @IsGranted("IS_SHARED", subject="todo")
+     * @IsGranted("IS_SHARED", subject="todo", statusCode=404)
      */
     public function getAction(ToDo $todo): Response
     {
@@ -93,7 +93,7 @@ class ToDoController extends AbstractController
     }
     /**
      * @Route("/delete/{id}", name="delete")
-     * @IsGranted("IS_SHARED", subject="todo")
+     * @IsGranted("IS_SHARED", subject="todo", statusCode=404)
      */
     public function deleteAction(ToDo $todo, EntityManagerInterface $entityManager): Response
     {
