@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add new Todo{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h5 class="card-header">Add new todo</h5>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_help(form) }}
+            {{ form_rest(form) }}
+            <form class="row g-3" method="POST">
+                <input type="submit" value="Create Todo" class="btn btn-success" />
+                {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
