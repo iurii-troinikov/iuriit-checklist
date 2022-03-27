@@ -6,8 +6,8 @@ namespace App\Service;
 
 use App\Entity\Checklist;
 use App\Entity\ToDo;
+use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -16,7 +16,6 @@ class ToDoService
 {
     private ValidatorInterface $validator;
     private EntityManagerInterface $em;
-
     public function __construct(
         ValidatorInterface $validator,
         EntityManagerInterface $em
@@ -34,7 +33,7 @@ class ToDoService
     /** @var ConstraintViolationList $errors */
     $errors = $this->validator->validate($todo);
     foreach ($errors as $error) {
-        throw new HttpException(400, $error->getMessage());
+        throw new ValidationException($error->getMessage());
     }
         $this->em->persist($todo);
         $this->em->flush();
@@ -45,14 +44,12 @@ class ToDoService
         if (!$checklist) {
             throw new NotFoundHttpException('Checklist not found');
         }
-
         $toDo->setText($text)
             ->setChecklist($checklist);
-
         /** @var ConstraintViolationList $errors */
         $errors = $this->validator->validate($toDo);
         foreach ($errors as $error) {
-            throw new HttpException(400, $error->getMessage());
+            throw new ValidationException($error->getMessage());
         }
         $this->em->persist($toDo);
         $this->em->flush();

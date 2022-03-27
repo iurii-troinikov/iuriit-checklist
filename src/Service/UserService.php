@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
+use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,7 +17,6 @@ class UserService
     private ValidatorInterface $validator;
     private UserPasswordHasherInterface $passwordHasher;
     private EntityManagerInterface $em;
-
     public function __construct(
         ValidatorInterface $validator,
         UserPasswordHasherInterface $passwordHasher,
@@ -27,16 +26,13 @@ class UserService
        $this->passwordHasher = $passwordHasher;
        $this->em = $em;
     }
-
     public function createAndFlush(string $plainPassword, string $username): User
     {
             $user = $this->create($plainPassword, $username);
             $this->em->persist($user);
             $this->em->flush();
-
         return $user;
     }
-
     public function create(string $plainPassword, string $username): User
     {
         $this->validateUserPassword($plainPassword);
@@ -47,10 +43,8 @@ class UserService
         );
         $user->setPassword($hashedPassword);
         $this->validateUser($user);
-
         return $user;
     }
-
     private function validateUserPassword(string $plainPassword)
     {
         /** @var ConstraintViolationList $passwordErrors */
@@ -65,19 +59,17 @@ class UserService
         ]);
         if ($passwordErrors->count()) {
             foreach ($passwordErrors as $error) {
-                throw new HttpException(400, $error->getMessage());
+                throw new ValidationException($error->getMessage());
             }
         }
     }
-
     private function validateUser(User $user)
     {
         $userErrors = $this->validator->validate($user);
         foreach ($userErrors as $error) {
-            throw new HttpException(400, $error->getMessage());
+            throw new ValidationException($error->getMessage());
         }
     }
-
     /**
      * @return User[]
      */

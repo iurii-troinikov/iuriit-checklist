@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Checklist;
+use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -14,7 +14,6 @@ class ChecklistService
 {
     private ValidatorInterface $validator;
     private EntityManagerInterface $em;
-
     public function __construct(
         ValidatorInterface $validator,
         EntityManagerInterface $em
@@ -28,7 +27,7 @@ class ChecklistService
     /** @var ConstraintViolationList $errors */
     $errors = $this->validator->validate($checklist);
     foreach ($errors as $error) {
-        throw new HttpException(400, $error->getMessage());
+        throw new ValidationException($error->getMessage());
     }
         $this->em->persist ($checklist);
         $this->em->flush();
