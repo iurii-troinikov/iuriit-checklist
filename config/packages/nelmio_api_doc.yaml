@@ -1,6 +1,5 @@
 imports:
   - { resource: '../api_doc.yaml' }
-
 nelmio_api_doc:
   documentation:
     info:

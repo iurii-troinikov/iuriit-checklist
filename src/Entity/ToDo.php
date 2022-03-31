@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,6 +22,7 @@ class ToDo implements Ownable
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("API")
      */
     private ?int $id = null;
     /**
@@ -32,11 +34,13 @@ class ToDo implements Ownable
      *      maxMessage = "ToDo text cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=100)
+     * @Groups("API")
      */
     private string $text;
     /**
      * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="toDos")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("API")
      */
     private Checklist $checklist;
     /**
@@ -47,6 +51,7 @@ class ToDo implements Ownable
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("API")
      */
     private UserInterface $owner;
     public function __construct(string $text, Checklist $checklist)

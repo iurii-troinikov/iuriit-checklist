@@ -3,12 +3,16 @@
 declare(strict_types=1);
 
 namespace App\Controller\Api;
+
+use App\Entity\ToDo;
+use App\Exception\ValidationException;
 use App\Model\API\ApiResponse;
-use App\Service\UserService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/todo", name="todo_")
@@ -17,10 +21,21 @@ class ToDoController extends AbstractApiController
 {
     /**
      * @Route(name="create", methods={"POST"})
-     *
-     * @IsGranted("IS_ANONYMOUS_USER")
      */
-    public function create(Request $request, UserService $userService): Response {
-
+    public function create(Request $request, ValidatorInterface $validator, EntityManagerInterface $em): Response
+    {
+        /** @var ToDo $todo */
+        $todo = $this->serializer->deserialize($request->getContent(), ToDo::class, 'json');
+        /** @var ConstraintViolationList $errors */
+        $errors = $validator->validate($todo);
+        if ($errors->count()) {
+            throw new ValidationException('', $errors);
+        }
+        $todo->setOwner($this->getUser());
+        $em->persist($todo);
+        $em->flush();
+        return new ApiResponse($this->serializer->serialize($todo, 'json', [
+            'groups' => ['API'],
+        ]));
     }
 }

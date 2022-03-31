@@ -77,8 +77,10 @@ nelmio_api_doc:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
         get:
           description: User List
           tags:
@@ -106,8 +108,10 @@ nelmio_api_doc:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
       /api/checklist:
         post:
           description: Creating of checklist
@@ -140,15 +144,19 @@ nelmio_api_doc:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
             '401':
               description: Access denied
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
         get:
           description: Get Checklists
           tags:
@@ -172,41 +180,117 @@ nelmio_api_doc:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
             '401':
               description: Access denied
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
-        /api/checklist/{id}:
-          delete:
-            description: Delete checklist
-            tags:
-              - Checklist
-            produces:
-              - application/json
-            parameters:
-              - name: id
-                description: Id of checklist to delete
-                required: true
-                in: path
-            responses:
-              '200':
-                description: Checklist was deleted
-              '401':
-                description: Access denied
-                schema:
-                  type: object
-                  properties:
-                    error:
+                  errors:
+                    type: array
+                    items:
                       type: string
-              '404':
-                description: Checklist not found
-                schema:
-                  type: object
-                  properties:
-                    error:
+      /api/checklist/{id}:
+        delete:
+          description: Delete checklist
+          tags:
+            - Checklist
+          produces:
+            - application/json
+          parameters:
+            - name: id
+              description: Id of checklist to delete
+              required: true
+              in: path
+          responses:
+            '200':
+              description: Checklist was deleted
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '404':
+              description: Checklist not found
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      /api/todo:
+        post:
+          description: Create todo
+          tags:
+            - Todo
+          produces:
+            - application/json
+          parameters:
+            - name: Todo details
+              description: Todo entity
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+          responses:
+            '200':
+              description: Todo was created
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                  owner:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
                       type: string
