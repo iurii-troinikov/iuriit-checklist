@@ -21,7 +21,7 @@ class ChecklistService
         $this->validator = $validator;
         $this->em = $em;
     }
-    public function createAndFlush(string $name): void
+    public function createAndFlush(string $name): Checklist
 {
     $checklist = new Checklist($name);
     /** @var ConstraintViolationList $errors */
@@ -31,5 +31,6 @@ class ChecklistService
     }
         $this->em->persist ($checklist);
         $this->em->flush();
+        return $checklist;
 }
 }

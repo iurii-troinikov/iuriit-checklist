@@ -193,38 +193,36 @@ nelmio_api_doc:
                 properties:
                   error:
                     type: string
-  #      /api/checklist/{id}:
-  #        delete:
-  #          description: Delete checklist
-  #          tags:
-  #            - Checklist
-  #          produces:
-  #            - application/json
-  #          parameters:
-  #            - name: Checklist id
-  #              description: Id of checklist to delete
-  #              required: true
-  #              in: path
-  #          responses:
-  #            '200':
-  #              description: Checklist was deleted
-  #            '401':
-  #              description: Access denied
-  #              schema:
-  #                type: object
-  #                properties:
-  #                  error:
-  #                    type: string
-  #            '404':
-  #              description: Checklist not found
-  #              schema:
-  #                type: object
-  #                properties:
-  #                  error:
-  #                    type: string
+        /api/checklist/{id}:
+          delete:
+            description: Delete checklist
+            tags:
+              - Checklist
+            produces:
+              - application/json
+            parameters:
+              - name: id
+                description: Id of checklist to delete
+                required: true
+                in: path
+            responses:
+              '200':
+                description: Checklist was deleted
+              '401':
+                description: Access denied
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+              '404':
+                description: Checklist not found
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
 
-  areas: # to filter documented areas
+  routes:
     path_patterns:
-      - ^/api(?!/doc$)
-    host_patterns:
-      - ^api\.
+      - ^/api(?!/doc)
