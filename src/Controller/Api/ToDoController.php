@@ -8,6 +8,7 @@ use App\Entity\ToDo;
 use App\Exception\ValidationException;
 use App\Model\API\ApiResponse;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,5 +49,21 @@ class ToDoController extends AbstractApiController
             'json',
             ['groups' => 'API']
         ));
+    }
+    /**
+     * @Route("/{id}", name="delete", methods={"DELETE"})
+     *
+     * @IsGranted("IS_SHARED", subject="todo", statusCode=404)
+     */
+    public function delete(ToDo $todo, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->getUser() === $todo->getUser()) {
+            $entityManager->remove($todo);
+        } else {
+            $todo->getUsers()->removeElement($this->getUser());
+        }
+        $entityManager->flush();
+
+        return new ApiResponse();
     }
 }
