@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List All Todos {% endblock %}
+
+{% block body %}
+    {% for todo in todos %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text d-flex">{{ todo.text }}</p>
+                <a href="{{ path('todo_get', {'id': todo.id}) }}" class="btn btn-warning">
+                        Read
+                </a>
+                {% if app.user.id != todo.user.id %}
+                    <i class="bi bi-share-fill text-success "></i>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    {{ include('pagination.html.twig') }}
+{% endblock %}
