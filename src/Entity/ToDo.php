@@ -22,7 +22,7 @@ class ToDo implements Ownable
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private ?int $id = null;
     /**
@@ -34,13 +34,13 @@ class ToDo implements Ownable
      *      maxMessage = "ToDo text cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=100)
-     * @Groups("API")
+     * @Groups({"API_GET", "API_UPDATE"})
      */
     private string $text;
     /**
      * @ORM\ManyToOne(targetEntity=Checklist::class, inversedBy="toDos")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private Checklist $checklist;
     /**
@@ -51,7 +51,7 @@ class ToDo implements Ownable
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private UserInterface $owner;
     public function __construct(string $text, Checklist $checklist)

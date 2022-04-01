@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private ?int $id = null;
     /**
@@ -35,12 +35,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      maxMessage = "Username cannot be longer than {{ limit }} characters"
      * )
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private string $username;
     /**
      * @ORM\Column(type="json")
-     * @Groups("API")
+     * @Groups("API_GET")
      */
     private array $roles = [];
     /**

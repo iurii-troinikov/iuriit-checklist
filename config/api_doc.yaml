@@ -372,3 +372,74 @@ nelmio_api_doc:
                     type: array
                     items:
                       type: string
+        put:
+          description: Edit todo
+          tags:
+            - Todo
+          produces:
+            - application/json
+          parameters:
+            - name: id
+              description: Id of todo to edit
+              required: true
+              in: path
+            - name: Todo details
+              description: Todo entity
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+          responses:
+            '200':
+              description: Todo was updated
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                  owner:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string

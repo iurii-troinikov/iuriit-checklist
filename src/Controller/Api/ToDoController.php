@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -36,7 +37,7 @@ class ToDoController extends AbstractApiController
         $em->persist($todo);
         $em->flush();
         return new ApiResponse($this->serializer->serialize($todo, 'json', [
-            'groups' => ['API'],
+            'groups' => ['API_GET'],
         ]));
     }
     /**
@@ -65,5 +66,26 @@ class ToDoController extends AbstractApiController
         $entityManager->flush();
 
         return new ApiResponse();
+    }
+    /**
+     * @Route("/{id}", name="edit", methods={"PUT"})
+     *
+     * @IsGranted("IS_SHARED", subject="todo", statusCode=404)
+     */
+    public function edit(ToDo $todo, Request $request, ValidatorInterface $validator, EntityManagerInterface $em): Response
+    {
+        /** @var ToDo $todo */
+        $todo = $this->serializer->deserialize($request->getContent(), ToDo::class, 'json', [
+            AbstractNormalizer::OBJECT_TO_POPULATE => $todo
+        ]);
+        /** @var ConstraintViolationList $errors */
+        $errors = $validator->validate($todo);
+        if ($errors->count()) {
+            throw new ValidationException('', $errors);
+        }
+        $em->flush();
+        return new ApiResponse($this->serializer->serialize($todo, 'json', [
+            'groups' => ['API_GET'],
+        ]));
     }
 }

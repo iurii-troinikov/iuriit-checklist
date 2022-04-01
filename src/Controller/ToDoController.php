@@ -8,7 +8,6 @@ use App\Entity\Checklist;
 use App\Entity\ToDo;
 use App\Enum\FlashMessagesEnum;
 use App\Form\TodoType;
-use App\Service\ToDoService;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -115,7 +114,6 @@ class ToDoController extends AbstractController
         $form = $this->createForm(TodoType::class, $todo);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($todo);
             $em->flush();
             $this->addFlash(FlashMessagesEnum::SUCCESS, sprintf('Todo "%s" was successfully changed', $todo->getText()));
             return $this->redirectToRoute('todo_get', ['id' => $todo->getId()]);

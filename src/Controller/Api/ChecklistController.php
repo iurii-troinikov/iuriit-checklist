@@ -28,7 +28,7 @@ class ChecklistController extends AbstractApiController
         $checklistName = $requestContent['name'] ?? null;
         $checklist = $checklistService->createAndFlush($checklistName);
         return new ApiResponse($this->serializer->serialize($checklist, 'json', [
-            'groups' => ['API']
+            'groups' => ['API_GET'],
         ]));
     }
     /**
@@ -40,7 +40,7 @@ class ChecklistController extends AbstractApiController
             'user' => $this->getUser()
         ]);
         return new ApiResponse($this->serializer->serialize($checklists, 'json', [
-            'groups' => ['API']
+            'groups' => ['API_GET']
         ]));
     }
     /**
