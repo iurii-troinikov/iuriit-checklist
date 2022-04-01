@@ -9,6 +9,7 @@ use App\Exception\ValidationException;
 use App\Service\DataTransformService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,7 +45,10 @@ class HttpExceptionListener
     private function handleApiException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        $event->setResponse(new JsonResponse(['errors' => $this->getErrorMessages($exception)], $exception->getCode()));
+        $event->setResponse(new JsonResponse(
+            ['errors' => $this->getErrorMessages($exception)],
+            $exception->getCode() ?: Response::HTTP_INTERNAL_SERVER_ERROR
+        ));
     }
     private function getErrorMessages(Throwable $exception): array
     {
