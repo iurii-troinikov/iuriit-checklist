@@ -35,20 +35,18 @@ class UserService
     }
     public function create(string $plainPassword, string $username): User
     {
-        $this->validateUserPassword($plainPassword);
         $user = new User($username);
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
             $plainPassword
         );
         $user->setPassword($hashedPassword);
-        $this->validateUser($user);
+        $this->validateUser($user, $plainPassword);
         return $user;
     }
-    private function validateUserPassword(string $plainPassword)
+    private function validateUserPassword(string $plainPassword): ConstraintViolationList
     {
-        /** @var ConstraintViolationList $passwordErrors */
-        $passwordErrors = $this->validator->validate($plainPassword, [
+        return $this->validator->validate($plainPassword, [
             new Assert\NotBlank(['message' => "Password should not be blank"]),
             new Assert\Length([
                 'min' => 3,
@@ -57,17 +55,15 @@ class UserService
                 'maxMessage' => "Password cannot be longer than {{ limit }} characters"
             ])
         ]);
-        if ($passwordErrors->count()) {
-            foreach ($passwordErrors as $error) {
-                throw new ValidationException($error->getMessage());
-            }
-        }
     }
-    private function validateUser(User $user)
+    private function validateUser(User $user, string $plainPassword)
     {
         $userErrors = $this->validator->validate($user);
-        foreach ($userErrors as $error) {
-            throw new ValidationException($error->getMessage());
+        $userErrors->addAll(
+            $this->validateUserPassword($plainPassword)
+        );
+        if ($userErrors->count()) {
+            throw new ValidationException('', $userErrors);
         }
     }
     /**
