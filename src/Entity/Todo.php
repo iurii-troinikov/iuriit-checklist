@@ -15,19 +15,19 @@ class Todo
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $title;
+    private string $title;
 
     /**
      * @var string
      * @ORM\Column(type="text")
      */
-    private $text;
+    private string $text;
 
     public function getId(): int
     {
