@@ -1,5 +1,5 @@
 <?php
-/*
+
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -24,4 +24,4 @@ final class Version20211219110245 extends AbstractMigration
     {
         $this->addSql('DROP TABLE activity');
     }
-}*/
+}
