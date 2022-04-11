@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=todoRepository::class)
  */
-class todo
+class Todo
 {
     /**
      * @ORM\Id
@@ -21,13 +21,13 @@ class todo
      * @var string
      * @ORM\Column(type="string", length=100)
      */
-    private $title;
+    private string $title;
 
     /**
      * @var string
      * @ORM\Column(type="text")
      */
-    private $text;
+    private string $text;
 
     public function getId(): int
     {

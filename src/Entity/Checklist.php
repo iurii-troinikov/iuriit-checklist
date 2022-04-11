@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\checklistRepository;
+use App\Repository\ChecklistRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=checklistRepository::class)
+ * @ORM\Entity(repositoryClass=ChecklistRepository::class)
  */
-class checklist
+class Checklist
 {
     /**
      * @ORM\Id
@@ -20,12 +20,12 @@ class checklist
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $todos;
+    private string $todos;
 
 
     public function getTitle(): string

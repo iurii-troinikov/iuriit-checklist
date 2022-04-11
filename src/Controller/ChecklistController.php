@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
-use App\Entity\todo;
+use App\Entity\Todo;
 use App\Repository\todoRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -161,7 +161,7 @@ class ChecklistController extends AbstractController
     public function createAction(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $newtodo = new todo();
+        $newtodo = new Todo();
         $newtodo
             ->setTitle('New todo title')
             ->setText('New todo text');
