@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\todoRepository;
+use App\Repository\TodoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=todoRepository::class)
+ * @ORM\Entity(repositoryClass=TodoRepository::class)
  */
 class Todo
 {
