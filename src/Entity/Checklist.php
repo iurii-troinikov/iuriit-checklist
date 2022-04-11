@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\checklistRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Entity(repositoryClass=checklistRepository::class)
  */
-class Category
+class checklist
 {
     /**
      * @ORM\Id
@@ -25,7 +25,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $notes;
+    private $todos;
 
 
     public function getTitle(): string
@@ -40,14 +40,14 @@ class Category
         return $this;
     }
 
-    public function getNotes(): string
+    public function gettodos(): string
     {
-        return $this->notes;
+        return $this->todos;
     }
 
-    public function setNotes(string $notes): self
+    public function settodos(string $todos): self
     {
-        $this->notes = $notes;
+        $this->todos = $todos;
 
         return $this;
     }
