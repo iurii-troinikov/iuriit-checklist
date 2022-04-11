@@ -9,16 +9,11 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20211107090241 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return 'Create Category Entity';
-    }
-
     public function up(Schema $schema): void
     {
 
         $this->addSql('
-        CREATE TABLE category (
+        CREATE TABLE checklist (
             id INT AUTO_INCREMENT NOT NULL, 
             title VARCHAR(100) DEFAULT NULL, 
             todos VARCHAR(255) DEFAULT NULL, 
@@ -31,6 +26,6 @@ final class Version20211107090241 extends AbstractMigration
     public function down(Schema $schema): void
     {
 
-        $this->addSql('DROP TABLE category');
+        $this->addSql('DROP TABLE checklist');
     }
 }
