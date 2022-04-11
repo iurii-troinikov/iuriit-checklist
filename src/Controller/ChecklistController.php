@@ -50,8 +50,7 @@ class ChecklistController extends AbstractController
         }
         $em->remove($checklist);
         $em->flush();
-        $this->addFlash( FlashMessagesEnum::SUCCESS, sprintf('Category %s was removed', $checklist->getTitle()));
+        $this->addFlash( FlashMessagesEnum::SUCCESS, sprintf('Checklist %s was removed', $checklist->getTitle()));
         return $this->redirectToRoute('page_home');
     }
 }
-
