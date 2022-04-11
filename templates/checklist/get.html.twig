@@ -5,10 +5,8 @@
 {% block body %}
             <h4>
                 <a href="{{ path('checklist_get', {'checklistId': todo.checklist_id, 'todoId': todo.id}) }}">
-                    {{ todo.title }}
                 </a>
             </h4>
             <p>{{ todo.text }}</p>
 
 {% endblock %}
-
