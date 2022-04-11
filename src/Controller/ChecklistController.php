@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use App\Entity\Todo;
-use App\Repository\todoRepository;
+use App\Repository\TodoRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
