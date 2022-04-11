@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\NoteRepository;
+use App\Repository\todoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=NoteRepository::class)
+ * @ORM\Entity(repositoryClass=todoRepository::class)
  */
-class Note
+class Todo
 {
     /**
      * @ORM\Id
