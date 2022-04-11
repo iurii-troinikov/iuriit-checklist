@@ -16,7 +16,7 @@ final class Version20211106122312 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql('
-           CREATE TABLE todo (
+           CREATE TABLE to_do (
                id INT AUTO_INCREMENT NOT NULL, 
                text LONGTEXT NOT NULL, 
                PRIMARY KEY(id)
@@ -26,6 +26,6 @@ final class Version20211106122312 extends AbstractMigration
     }
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE todo');
+        $this->addSql('DROP TABLE to_do');
     }
 }
