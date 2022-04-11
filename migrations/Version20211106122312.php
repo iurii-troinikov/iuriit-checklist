@@ -19,7 +19,7 @@ final class Version20211106122312 extends AbstractMigration
     {
 
         $this->addSql('
-           CREATE TABLE todo (
+           CREATE TABLE to_do (
                id INT AUTO_INCREMENT NOT NULL, 
                title VARCHAR(100) NOT NULL, 
                text LONGTEXT NOT NULL, 
@@ -32,6 +32,6 @@ final class Version20211106122312 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE todo');
+        $this->addSql('DROP TABLE to_do');
     }
 }
