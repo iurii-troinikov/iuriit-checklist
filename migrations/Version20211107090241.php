@@ -9,10 +9,6 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20211107090241 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return 'Create checklist Entity';
-    }
     public function up(Schema $schema): void
     {
         $this->addSql('
