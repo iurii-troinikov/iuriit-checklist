@@ -1,5 +1,5 @@
+<?php
 
-/*
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-/*final class Version20220124091121 extends AbstractMigration
+final class Version20220124091121 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -44,4 +44,4 @@ use Doctrine\Migrations\AbstractMigration;
         $this->addSql('DROP TABLE to_do');
         $this->addSql('DROP TABLE user');
     }
-}*/*/
+}
