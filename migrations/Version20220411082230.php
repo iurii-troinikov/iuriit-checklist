@@ -1,5 +1,5 @@
 <?php
-
+/*
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220411082230 extends AbstractMigration
+/*final class Version20220411082230 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -50,4 +50,4 @@ final class Version20220411082230 extends AbstractMigration
         $this->addSql('ALTER TABLE to_do ADD CONSTRAINT FK_1249EDA0A76ED395 FOREIGN KEY (owner_id) REFERENCES user (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
         $this->addSql('CREATE INDEX IDX_1249EDA07E3C61F9 ON to_do (owner_id)');
     }
-}
+}*/
