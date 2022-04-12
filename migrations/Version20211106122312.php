@@ -9,10 +9,6 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20211106122312 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return 'Create todo entity';
-    }
     public function up(Schema $schema): void
     {
         $this->addSql('
