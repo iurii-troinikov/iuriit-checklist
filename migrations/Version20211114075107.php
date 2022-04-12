@@ -1,5 +1,5 @@
 <?php
-
+/*
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -28,4 +28,4 @@ final class Version20211114075107 extends AbstractMigration
         $this->addSql('DROP TABLE checklist');
         $this->addSql('DROP TABLE to_do');
     }
-}
+}*/
