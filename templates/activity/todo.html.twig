@@ -17,7 +17,7 @@
         {% for item in data %}
             <tr>
                 <td>{{ item.createdAt|date("Y-m-d H:i:s", "Europe/Kiev") }}</td>
-                <td>{{ item.todo.text }}</td>
+                {#<td>{{ item.todo.text }}</td>#}
                 <td>{{ item.user.username }}</td>
                 <td class="brake-word">
                     {% for property in item.changes|keys %}
