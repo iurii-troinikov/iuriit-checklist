@@ -22,7 +22,7 @@ class EditToDoActivity extends Activity
     /**
      * @ORM\Column(type="json", nullable=true)
      */
-    private array $changes = [];
+    private $changes = [];
     public function __construct(User $user, ToDo $toDo, array $changes) {
         parent::__construct($user);
         $this->toDo = $toDo;
