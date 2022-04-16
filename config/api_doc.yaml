@@ -1,0 +1,445 @@
+nelmio_api_doc:
+  documentation:
+    paths:
+      /api/login_check:
+        post:
+          description: User Authentication
+          tags:
+            - Authentication
+          produces:
+            - application/json
+          security: [ ]
+          parameters:
+            - name: Credentials
+              description: User credentials
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+          responses:
+            '200':
+              description: Success login
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+            '401':
+              description: Invalid credentials
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+      /api/user:
+        post:
+          description: User Registration
+          security: [ ]
+          tags:
+            - Authentication
+          produces:
+            - application/json
+          parameters:
+            - name: User details
+              description: User credentials
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+          responses:
+            '200':
+              description: Success registration
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+                  role:
+                    type: array
+                    items:
+                      type: string
+            '400':
+              description: Invalid data
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        get:
+          description: User List
+          tags:
+            - User
+          produces:
+            - application/json
+          responses:
+            '200':
+              description: List of users
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    role:
+                      type: array
+                      items:
+                        type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      /api/checklist:
+        post:
+          description: Creating of checklist
+          tags:
+            - Checklist
+          produces:
+            - application/json
+          parameters:
+            - name: Checklist details
+              description: Checklist details
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+          responses:
+            '200':
+              description: Created Checklist
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        get:
+          description: Get Checklists
+          tags:
+            - Checklist
+          produces:
+            - application/json
+          responses:
+            '200':
+              description: List of Checklists
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      /api/checklist/{id}:
+        delete:
+          description: Delete checklist
+          tags:
+            - Checklist
+          produces:
+            - application/json
+          parameters:
+            - name: id
+              description: Id of checklist to delete
+              required: true
+              in: path
+          responses:
+            '200':
+              description: Checklist was deleted
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '404':
+              description: Checklist not found
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      /api/todo:
+        post:
+          description: Create todo
+          tags:
+            - Todo
+          produces:
+            - application/json
+          parameters:
+            - name: Todo details
+              description: Todo entity
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+          responses:
+            '200':
+              description: Todo was created
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                  owner:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        get:
+          description: Get all todos
+          tags:
+            - Todo
+          produces:
+            - application/json
+          responses:
+            '200':
+              description: All todos of current user
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    checklist:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                    owner:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        username:
+                          type: string
+                        roles:
+                          type: array
+                          items:
+                            type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      /api/todo/{id}:
+        delete:
+          description: Delete todo
+          tags:
+            - Todo
+          produces:
+            - application/json
+          parameters:
+            - name: id
+              description: Id of todo to delete
+              required: true
+              in: path
+          responses:
+            '200':
+              description: Todo was deleted
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '404':
+              description: Todo not found
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        put:
+          description: Edit todo
+          tags:
+            - Todo
+          produces:
+            - application/json
+          parameters:
+            - name: id
+              description: Id of todo to edit
+              required: true
+              in: path
+            - name: Todo details
+              description: Todo entity
+              required: true
+              in: body
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+          responses:
+            '200':
+              description: Todo was updated
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  checklist:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                  owner:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      roles:
+                        type: array
+                        items:
+                          type: string
+            '401':
+              description: Access denied
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+            '400':
+              description: Bad request
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string

@@ -1,0 +1,48 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ActivityController!{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Created at</th>
+            <th scope="col">Todo name</th>
+            <th scope="col">Edited By</th>
+            <th scope="col">Changes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in data %}
+            <tr>
+                <td>{{ item.createdAt|date("Y-m-d H:i:s", "Europe/Kiev") }}</td>
+                {#<td>{{ item.todo.text }}</td>#}
+                <td>{{ item.user.username }}</td>
+                <td class="brake-word">
+                    {% for property in item.changes|keys %}
+                        <div class="row mt-2">
+                            <h5>{{ property }}:</h5>
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ item.changes[property][0] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ item.changes[property][1] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ include('pagination.html.twig') }}
+{% endblock %}

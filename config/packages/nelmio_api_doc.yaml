@@ -1,0 +1,19 @@
+imports:
+  - { resource: '../api_doc.yaml' }
+nelmio_api_doc:
+  documentation:
+    info:
+      title: Iuriit Checklist
+      description: Your todos can stored here
+      version: 0.1.0
+    securityDefinitions:
+      Bearer:
+        type: apiKey
+        description: 'Value: Bearer {token}'
+        name: Authorization
+        in: header
+    security:
+      - Bearer: []
+  routes:
+    path_patterns:
+      - ^/api(?!/doc)
