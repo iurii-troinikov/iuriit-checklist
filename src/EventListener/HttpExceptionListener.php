@@ -37,7 +37,6 @@ class HttpExceptionListener
             $refererUrl = '/';
         }
         $response = new RedirectResponse($refererUrl);
-        $response->setStatusCode($exception->getCode());
         foreach ($exception->getErrorsList() as $error) {
             $session->getFlashBag()->add(FlashMessagesEnum::FAIL, $error->getMessage());
         }
