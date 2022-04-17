@@ -7,7 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20220417063213 extends AbstractMigration
+final class Version20220417084639 extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
@@ -15,7 +15,6 @@ final class Version20220417063213 extends AbstractMigration
     }
     public function down(Schema $schema): void
     {
-
         $this->addSql('DROP TABLE todo');
     }
 }
