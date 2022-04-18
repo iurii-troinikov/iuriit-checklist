@@ -33,7 +33,7 @@ class ToDo implements Ownable
      *      minMessage = "ToDo text should be at least {{ limit }} characters long",
      *      maxMessage = "ToDo text cannot be longer than {{ limit }} characters"
      * )
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
      * @Groups({"API_GET", "API_UPDATE"})
      */
     private string $text;
