@@ -1,5 +1,5 @@
 <?php
-
+/*
 declare(strict_types=1);
 
 namespace DoctrineMigrations;
@@ -24,4 +24,4 @@ final class Version20211114082008 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_1249EDA0B16D08A7 ON to_do');
         $this->addSql('ALTER TABLE to_do DROP checklist_id');
     }
-}
+}*/
