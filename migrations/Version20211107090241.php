@@ -7,6 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
+
 final class Version20211107090241 extends AbstractMigration
 {
     public function getDescription(): string
@@ -21,7 +22,7 @@ final class Version20211107090241 extends AbstractMigration
         CREATE TABLE category (
             id INT AUTO_INCREMENT NOT NULL, 
             title VARCHAR(100) DEFAULT NULL, 
-            todos VARCHAR(255) DEFAULT NULL, 
+            notes VARCHAR(255) DEFAULT NULL, 
             PRIMARY KEY(id)
            ) 
                 DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
