@@ -16,7 +16,6 @@ final class Version20211225113034 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_AC74095A5BE9ECD7 ON activity (to_do_id)');
         $this->addSql('UPDATE activity SET type = \'visit\'');
     }
-
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE activity DROP FOREIGN KEY FK_AC74095A5BE9ECD7');
